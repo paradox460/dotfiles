@@ -13,3 +13,8 @@ If you've installed chezmoi using some other package manager, you just need to r
 ```
 chezmoi init --apply paradox460
 ```
+
+
+## Older version
+
+An older, manually managed version of my dotfiles exists in the `master` branch. It exists only for archival purposes
