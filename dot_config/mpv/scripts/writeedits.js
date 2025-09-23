@@ -1,1 +1,0 @@
-/Users/jeffsandberg/.dotfiles/.config/mpv/script_sources/paradox-scripts/writeedits/writeedits.js

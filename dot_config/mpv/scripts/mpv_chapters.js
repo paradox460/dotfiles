@@ -1,1 +1,0 @@
-/Users/jeffsandberg/.dotfiles/.config/mpv/script_sources/mpv-chapters/mpv_chapters.js

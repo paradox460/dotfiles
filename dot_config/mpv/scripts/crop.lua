@@ -1,1 +1,0 @@
-/Users/jeffsandberg/.local/share/chezmoi/dot_config/mpv/external_script_sources/mpv-scripts/scripts/crop.lua

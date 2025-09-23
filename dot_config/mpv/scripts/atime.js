@@ -1,1 +1,0 @@
-/Users/jeffsandberg/Developer/mpv-scripts/atime/atime.js
