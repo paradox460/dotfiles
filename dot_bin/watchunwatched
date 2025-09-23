@@ -1,0 +1,2 @@
+#! /usr/bin/env fish
+watchmpv --printf="%A@\t%p\n" --sort="-n -u" $argv

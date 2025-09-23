@@ -1,0 +1,4 @@
+$pdf_mode = 5;
+
+$clean_ext = "%R.xdv";
+@generated_exts = (@generated_exts, 'xdv', 'synctex.gz', 'nav', 'snm')

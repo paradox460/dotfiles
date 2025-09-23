@@ -1,0 +1,14 @@
+# Main bindings
+bind generic <Ctrl-C> !@sh -c "printf %(commit) | pbcopy"
+bind main O ?git rebase -i %(commit)^
+bind main P ?git rebase "%(prompt Enter branch name: )"
+bind main E ?@git commit --fixup %(commit)
+bind status A ?@git commit --amend --no-edit
+bind status X ?@rm %(file)
+bind status <Ctrl-X> ?@rm --cached %(file)
+
+set main-view-id = yes
+
+set diff-view-line-number = yes
+
+set mouse = yes

@@ -1,0 +1,17 @@
+#!/usr/bin/env fish
+
+set branch (git branch --show-current | tr -d '\n')
+
+set trailers "$(git config --get "branch.$branch.description" | git interpret-trailers --parse)"
+
+string match -r "Ticket-Ref: (?<ticket>\w+-\d+)" -- $trailers
+string match -r "Ticket-Name: (?<jiraname>\w+-\d+)" -- $trailers
+
+if test -n "$ticket"
+  gh pr create --title "[$ticket] $jiraname
+
+# $ticket
+" --editor $argv
+else
+  gh pr create $argv
+end

@@ -1,0 +1,21 @@
+# Rename to private-build-plans.toml
+[buildPlans.iosevka-paradox]
+family = "Iosevka Paradox"
+spacing = "normal"
+serifs = "sans"
+no-cv-ss = false
+export-glyph-names = false
+
+  [buildPlans.iosevka-paradox.variants]
+  inherits = "ss14"
+
+    [buildPlans.iosevka-paradox.variants.design]
+    paren = "flat-arc"
+
+  [buildPlans.iosevka-paradox.ligations]
+  inherits = "dlig"
+
+[buildPlans.iosevka-paradox.widths.normal]
+shape = 600
+menu = 5
+css = "normal"

@@ -1,0 +1,8 @@
+{{- $name := promptStringOnce . "name" "Your Name" -}}
+{{- $email := promptStringOnce . "email" "Email Address" -}}
+{{- $gpgSig := promptStringOnce . "gpgSig" "GPG Signature" -}}
+
+[data]
+  name = {{ $name | quote}}
+  email = {{ $email | quote }}
+  gpgSig = {{ $gpgSig | quote }}

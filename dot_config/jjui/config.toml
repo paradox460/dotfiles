@@ -1,0 +1,66 @@
+[preview]
+revision_command = [
+  "show",
+  "--color",
+  "always",
+  "-r",
+  "$change_id",
+  "--tool",
+  ":color-words",
+]
+file_command = [
+  "diff",
+  "--color",
+  "always",
+  "-r",
+  "$change_id",
+  "$file",
+  "--tool",
+  ":color-words",
+]
+show_at_start = true
+
+[ui.colors]
+"selected" = { bg = "#373B41" }
+"revisions details selected" = { bg = "#373B41" }
+
+[revisions]
+revset = "present(@) | ancestors(immutable_heads().., 10) | present(trunk())"
+
+[ui.tracer]
+enabled = true
+
+[custom_commands]
+"tug" = { key = [
+  "t",
+], args = [
+  "bookmark",
+  "move",
+  "--from",
+  "closest_bookmark($change_id)",
+  "--to",
+  "closest_pushable($change_id)",
+] }
+"ksdiff" = { key = [
+  "ctrl+k",
+], args = [
+  "diff",
+  "--tool",
+  "ksdiff",
+  "-r",
+  "$change_id",
+], show = "interactive" }
+
+[keys]
+split = ["S"]
+
+[keys.preview]
+half_page_down = ["ctrl+d", "pgdown"]
+half_page_up = ["ctrl+u", "pgup"]
+
+[keys.squash]
+mode = ["s"]
+
+[keys.details]
+split = ["S"]
+squash = ["s"]

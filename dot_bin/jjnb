@@ -1,0 +1,19 @@
+#!/usr/bin/env fish
+
+set main_argv $argv
+
+function __jj_new_branch
+  read -d \t -a -l args
+  set -l ticket $args[1]
+  set -l name (string trim $args[2] | string lower | string replace -a ' ' "-" -- | string replace -a -r "[^\-0-9a-z]" "" --)
+  set -l branchname "jeffs/$ticket/$name"
+  jj bookmark create $main_argv $branchname
+end
+
+jira list --template list-separated --query "resolution = unresolved and assignee=currentuser() ORDER BY priority asc, created" | \
+  fzf \
+    --delimiter "\t" \
+    --reverse \
+    --preview="jira view {1}" \
+    --bind="ctrl-e:execute(jira view -b {1})" | \
+  __jj_new_branch

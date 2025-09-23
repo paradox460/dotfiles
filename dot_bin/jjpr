@@ -1,0 +1,37 @@
+#!/usr/bin/env fish
+argparse -i "c/change=+" "r/ref=+" "N/dry-run" -- $argv
+
+trap "exit 2" SIGINT
+
+set -l push_args
+set -l bookmarks
+
+set -q _flag_dry_run; and set dry_run "--dry-run"
+
+# If we have -c set, skip automatic bookmark creation, and discard all `-r` options
+if set -q _flag_change
+  set -a push_args -N
+  for rev in $_flag_change
+    set -a push_args -c $rev
+  end
+  echo $bookmarks
+  jj git push $dry_run $argv &| read -z push_result
+
+  string match -q -g --all --regex  "Add bookmark (?<bookmarks>.*)\*? to" $push_result
+else
+  if set -q _flag_ref
+    set refs $_flag_ref
+  else
+    set refs "@"
+  end
+
+  for ref in $refs
+    set -a bookmarks (jj log -r "heads(::$ref & bookmarks())" -T "bookmarks ++ '"\n"'" --no-graph | string replace '*' '' )
+  end
+end
+
+for bookmark in $bookmarks
+  echo (set_color --bold cyan)"Opening PR for $bookmark"(set_color reset)
+  jj log -r "trunk()..$bookmark"
+  gh pr create $dry_run -H $bookmark $argv
+end

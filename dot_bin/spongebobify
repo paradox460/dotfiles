@@ -1,0 +1,17 @@
+#! /usr/bin/env fish
+
+set input (string join ' ' $argv)
+set output
+set caps_flipflop 1
+
+for char in (string split '' $input)
+  if test $caps_flipflop -eq 1
+    set -a output (string upper $char)
+    set caps_flipflop 0
+  else
+    set -a output (string lower $char)
+    set caps_flipflop 1
+  end
+end
+
+echo (string join '' $output)

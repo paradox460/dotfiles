@@ -1,0 +1,64 @@
+#! /usr/bin/env fish
+
+argparse -i "h/help" "d/duration=" "s/size=" "a/audio_codec=" "v/video_codec=" "e/extension=" "f/ffmpeg_options=" "o/outputdir=" -- $argv
+
+if set -q _flag_h
+  echo -e "Split a video file into segments smaller than a given file size or duration\n"
+  echo "Usage: [options] <input_files>"
+  echo "Options:"
+  echo "  -h, --help"
+  echo "  -d, --duration=<duration> Maximum output file duration"
+  echo "  -s, --size=<size> Maximum output file size"
+  echo "  -a, --audio_codec=<audio_codec>"
+  echo "  -v, --video_codec=<video_codec>"
+  echo "  -e, --extension=<extension> output file extension"
+  echo "  -f, --ffmpeg_options=<ffmpeg_options> additional ffmpeg options"
+  echo "  -o, --outputdir=<outputdir> where to output file to. Defaults to input file as a directory"
+  exit 0
+end
+
+if not set -q _flag_s || test -z "$_flag_s"
+  set _flag_s '6000k'
+end
+
+if not set -q _flag_d || test -z "$_flag_d"
+  set _flag_d 300
+end
+
+if not set -q _flag_a || test -z "$_flag_a"
+  set _flag_a 'libvorbis'
+end
+
+if not set -q _flag_v || test -z "$_flag_v"
+  set _flag_v 'libvpx'
+end
+
+if not set -q _flag_e || test -z "$_flag_e"
+  set _flag_e 'webm'
+end
+
+set -l ffmpeg_options "-c:v" $_flag_v "-c:a" $_flag_a "-fs" $_flag_s "-t" $_flag_d
+
+set -q _flag_f && test -n "$_flag_f" && set -a ffmpeg_options (string split ' ' -- $_flag_f)
+
+for file in $argv
+  set -l originalDuration (ffprobe -i $file -show_entries format=duration -v quiet -of default=noprint_wrappers=1:nokey=1)
+  set -l currentDuration 0
+  set -l count 0
+
+  set -l baseName (basename $file (string match -r '\.[^.]+$' $file))
+  set -l outputDir $baseName
+  if set -q _flag_o
+    set outputDir $_flag_o
+  end
+  mkdir -p $outputDir
+  set outputDir (string trim -r -c '/' -- $outputDir)
+  set -S outputDir
+  while test $currentDuration -lt $originalDuration
+    set -l outputFile {$outputDir}/{$baseName}_{$count}.{$_flag_e}
+    ffmpeg -hide_banner -i $file -ss $currentDuration $ffmpeg_options -map_metadata -1 -map_chapters -1 $outputFile
+    set -l lastDuration (ffprobe -i $outputFile -show_entries format=duration -v quiet -of default=noprint_wrappers=1:nokey=1)
+    set currentDuration (math $currentDuration + $lastDuration)
+    set count (math $count + 1)
+  end
+end

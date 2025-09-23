@@ -1,0 +1,15 @@
+[submodule "occivink-mpv-scripts"]
+	path = dot_config/mpv/external_script_sources/mpv-scripts
+	url = https://github.com/occivink/mpv-scripts.git
+[submodule "mpv_sponsorblock"]
+	path = dot_config/mpv/external_script_sources/mpv_sponsorblock
+	url = https://github.com/po5/mpv_sponsorblock
+[submodule "mpv-createchapter"]
+	path = dot_config/mpv/external_script_sources/mpv-createchapter
+	url = https://github.com/shinchiro/mpv-createchapter
+[submodule "mpv-chapters"]
+	path = dot_config/mpv/external_script_sources/mpv-chapters
+	url = https://github.com/zxhzxhz/mpv-chapters
+[submodule "paradox-scripts"]
+	path = dot_config/mpv/external_script_sources/paradox-scripts
+	url = https://github.com/paradox460/mpv-scripts

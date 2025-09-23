@@ -1,0 +1,137 @@
+[user]
+  signingkey = {{ print .gpgSig "!" | quote}}
+  email = {{ .email | quote }}
+  name = {{ .name | quote }}
+
+[core]
+  excludesfile = ~/.config/git/ignore
+  attributesFile = ~/.config/git/attributes
+  pager = delta
+[rerere]
+  enabled = 1
+[color]
+  ui = auto
+[branch]
+  autosetupmerge = always
+  autosetuprebase = always
+  sort = -committerdate
+[push]
+  default = simple
+  followtags = true
+[alias]
+  # Returns the name of the current branch
+  current-branch = rev-parse --symbolic-full-name --abbrev-ref HEAD
+
+  # Returns a short version of the current SHA
+  current-sha = rev-parse --verify --short @
+
+  # Publish a new remote branch
+  shove = "!f() { H=$(git current-branch) && git push -u origin $H; }; f"
+
+  # Show the oldest common ancestor. $1 and $2 are branches, defaulting to master and HEAD by default
+  ancestor = !bash -c 'diff --old-line-format= --new-line-format= <(git rev-list --first-parent \"${1:-master}\") <(git rev-list --first-parent \"${2:-HEAD}\") | head -1' -
+
+  # Fetch and rebase
+  fup = "!git fetch && git rebase --autostash FETCH_HEAD"
+
+  # Colorful logs in the terminal
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+  # Pull then push
+  pp = "!f() { git pull; git push; }; f"
+
+  # Push Gently
+  pf = push --force-with-lease
+
+  # Create a branch based off the current branch's name. Ex: I'm on "mybranch", the new branch would be called "mybranch-newbranch"
+  cb = "!f() { H=$(git current-branch); git checkout -b $H-$1; }; f"
+
+  # Checkout a new branch from the specified branch, named off of that branch
+  cob = "!f() { H=$(git current-branch); git checkout -b $1-$H $1; }; f"
+
+  # Publish a branch and open a pull request
+  pupr = "!f() { H=$(git current-branch); git shove; gh pr create; }; f"
+
+  # grep
+  g = grep --break --heading --line-number
+
+  # grep everything
+  gg ="!f() { git rev-list --all | xargs git grep $1; }; f"
+
+  # Clean up branches
+  dm = "!f() { git branch | gsed -E '/^\\*|master/D; s/\\s+//' | vipe | xargs git branch -D; }; f"
+
+  # Reset to remote hard
+  ro = "!f() { H=$(git current-branch); git reset --hard origin/$H; }; f"
+
+  # View a range-diff of the previous rebase
+  rd = range-diff @{u} @{1} @
+
+  # Get the last tag name
+  last-tag = describe --abbrev=0 --tags @^
+
+[mergetool]
+  prompt = false
+[merge]
+  ff = false
+  conflictStyle = zdiff3
+[pull]
+  rebase = true
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+[difftool "code"]
+  cmd = code --diff --wait "$LOCAL" "$REMOTE"
+[mergetool "ksdiff"]
+  cmd = ksdiff --merge --output "$MERGED" --base "$BASE" -- "$LOCAL" --snapshot "$REMOTE" --snapshot
+  trustExitCode = true
+[difftool]
+  prompt = false
+  trustExitCode = true
+[diff]
+  tool = difftastic
+  external = difft
+  submodule = log
+  colorMoved = default
+  colorMovedWS = allow-indentation-change
+
+[filter "media"]
+  clean = git-media-clean %f
+  smudge = git-media-smudge %f
+[hub]
+  protocol = ssh
+[credential]
+  helper = osxkeychain
+[grep]
+  extendRegexp = true
+  lineNumber = true
+[rebase]
+  autosquash = true
+  autostash = true
+  updateRefs = true
+[commit]
+  gpgsign = true
+  cleanup = scissors
+[help]
+  autocorrect = prompt
+[status]
+  submoduleSummary = true
+[submodule]
+  recurse = true
+[fetch]
+  prune = true
+  prunetags = true
+[log]
+  date = iso
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true
+  side-by-side = true
+  line-numbers = true
+
+[credential "https://github.com"]
+  helper =
+  helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+  helper =
+  helper = !/opt/homebrew/bin/gh auth git-credential

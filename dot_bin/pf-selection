@@ -1,0 +1,2 @@
+#! /usr/bin/env -S osascript -l JavaScript
+Application("Path Finder").selection()?.map(x => x.posixPath()).join("\n")

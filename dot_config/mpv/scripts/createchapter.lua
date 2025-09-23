@@ -1,0 +1,1 @@
+/Users/jeffsandberg/.dotfiles/.config/mpv/script_sources/mpv-createchapter/createchapter.lua

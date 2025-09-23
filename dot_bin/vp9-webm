@@ -1,0 +1,101 @@
+#! /usr/bin/env fish
+
+argparse -x 'c,t' -i 'e/edit' 'c/crf=' 't/targetfs=' 'h/help' 'copy' 'y/yoink' 'tmp' -- $argv
+
+if set -q _flag_h
+  echo -e "\
+Convert a video to a VP9/opus webm, suitable for uploading to imageboards
+Usage: vp9-webm [options] video-file
+Options:
+  -h, --help          Show this help message and exit
+  -e, --edit          Open the command in vim before editing. Requires the vipe
+                      command to be installed
+  -c, --crf=<crf>     Specify the desired CRF to be used
+  -t, --targetfs=<fs> Specify the target file size. Will conduct a binary search
+                        to find a suitable CRF that comes smaller, but as close to the specified
+                        file size as possible.
+                      Accepts basic file size multipliers (k, m, etc).
+  --copy              Copies the resulting output file to the clipboard.
+                        Requires file-to-clipboard command
+  --tmp               Outputs finished movie to /tmp dir
+  -y, --yoink         Puts the file in Yoink, if the yoink command can be found.
+  "
+  exit 0
+end
+
+if not set -q _flag_c
+       and test -z "$_flag_c"
+          set _flag_c 31
+end
+
+set -l fs_limit ""
+if set -q _flag_t
+  set fs_limit "-fs $_flag_t"
+end
+
+
+set -l f $argv[1]
+set -l original_duration (ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $f)
+
+set -l l_crf 0
+set -l r_crf 63
+
+set -l newname
+set -l dir_prefix
+if set -q _flag_tmp
+  set dir_prefix '/tmp/'
+end
+
+while true
+  set -l ext (string split --right --max 1 '.' -- $f)[-1]
+  set newname "$dir_prefix"(basename $f "."$ext)'.webm'
+
+
+  set -l command "ffmpeg -hide_banner -i \"$f\" -c:v libvpx-vp9 -an -b:v 0 -crf $_flag_c $fs_limit -pass 1 -f null /dev/null && ffmpeg -y -hide_banner -i \"$f\" -c:v libvpx-vp9 -c:a libopus -b:v 0 -crf $_flag_c $fs_limit -pass 2 \"$newname\""
+
+  if set -q _flag_e
+    set command (printf $command | vipe)
+  end
+
+  fish -c $command
+  rm ffmpeg2pass-*.log
+
+  if not set -q _flag_t
+    break
+  end
+
+  set -l duration (ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $newname)
+
+  if test $duration -ge $original_duration
+    test "pass, no truncate"
+    set r_crf $_flag_c
+    mv $newname "maybe-$newname"
+  else if test $duration -lt $original_duration
+    test "fail, truncate"
+    set l_crf $_flag_c
+  end
+
+  if test (math $r_crf - $l_crf) -le 1
+    echo "Found target size, exiting"
+    if set -q _flag_tmp
+      mv "maybe-$newname" /tmp/$newname
+      set newname /tmp/$newname
+    else
+      mv "maybe-$newname" $newname
+    end
+    exit 0
+  end
+
+
+  set _flag_c (math "max(0,min(63, floor(($l_crf + $r_crf)/2)))")
+end
+
+
+if set -q _flag_copy; and command -q file-to-clipboard
+  file-to-clipboard "$newname"
+end
+
+
+if set -q _flag_y
+  yoink (readlink -f $newname)
+end

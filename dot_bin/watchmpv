@@ -1,0 +1,38 @@
+#! /usr/bin/env fish
+argparse -i "prune=+" "findOpts=" "printf=" "sort=" "filetypes=+" -- $argv
+
+set -q _flag_printf; or set _flag_printf "%T@\t%p\n"
+if set -q _flag_sort;
+  echo $_flag_sort | read -ta _flag_sort
+else
+  set _flag_sort -n -u -r
+end
+
+if set -q _flag_findOpts
+  echo $_flag_findOpts | read -ta _flag_findOpts
+end
+
+set -l prune -ipath \*.stversions
+if set -q _flag_prune
+  for p in $_flag_prune
+    set -a prune -o -ipath $p
+  end
+end
+
+set -l filetypes
+if set -q _flag_filetypes
+  set _flag_filetypes (string split "," $_flag_filetypes)
+else
+  set _flag_filetypes mkv webm mp4 m4v avi
+end
+
+for i in $_flag_filetypes
+  set -a filetypes -o -iname \*.$i
+end
+
+# Erase the -o at the start
+set -e filetypes[1]
+
+set -q _flag_depth; set -a _flag_depth -depth
+
+gfind $pwd \( $prune \) -prune -o \( $filetypes \) $_flag_findOpts -type f -printf "$_flag_printf" | gsort $_flag_sort | gawk -F '\t' -v ORS='\0' '{print $2}' | xargs -0 realpath | mpv --playlist=- --fs --loop $argv

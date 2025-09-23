@@ -1,0 +1,37 @@
+#! /usr/bin/env fish
+argparse 't/tmp' 'c/copy' 'y/yoink' 'o/output=' 'm/mute' 'crf=' -- $argv
+
+if set -q _flag_copy; or set -q _flag_output; and test (count $argv) -gt 1
+  echo "Only works with one file at a time, exiting" >&2
+  exit 1
+end
+if set -q _flag_copy; and not command -sq file-to-clipboard
+  echo "No file-to-clipboard command, will not copy" >&2
+  exit 1
+end
+
+for i in $argv
+  set -l ext (string split --right --max 1 '.' -- $i)[-1]
+  set -l newname (basename $i "."$ext | string replace -r '\.[hx]265' '' )'.mp4'
+  if set -q _flag_output
+    set newname $_flag_output
+  end
+  if set -q _flag_t
+    set newname /tmp/$newname
+  end
+  if set -q _flag_m
+    set audio_codec -an
+  else
+    set audio_codec -c:a aac
+  end
+  if set -q _flag_crf
+    set -p _flag_crf "-crf"
+
+  end
+
+  ffmpeg -hide_banner -i $i -c:v libx264 $audio_codec -pix_fmt yuv420p -map_metadata -1 -vf "scale=ceil(iw/2)*2:ceil(ih/2)*2" $_flag_crf -y $newname
+  set newname (readlink -f $newname)
+  set -q _flag_copy; and file-to-clipboard $newname
+  set -q _flag_yoink; and yoink $newname
+  echo $newname
+end

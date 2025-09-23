@@ -1,0 +1,471 @@
+{
+  "profiles": [
+    {
+      "complex_modifications": {
+        "rules": [
+          {
+            "description": "Caps-lock to escape when alone, hyper when used as modifier, caps-lock when used with Option",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "mandatory": [
+                      "left_option"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "caps_lock"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "caps_lock"
+                },
+                "to": [
+                  {
+                    "key_code": "left_command",
+                    "modifiers": [
+                      "option",
+                      "control",
+                      "shift"
+                    ]
+                  }
+                ],
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Foot Pedals",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "a"
+                },
+                "to": [
+                  {
+                    "key_code": "rewind"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_if",
+                    "file_paths": [
+                      "^/opt/homebrew/bin/mpv$"
+                    ],
+                    "bundle_identifiers": [
+                      "^io\\.mpv$"
+                    ]
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "product_id": 45057,
+                        "vendor_id": 13651
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "b"
+                },
+                "to": [
+                  {
+                    "key_code": "play_or_pause"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_if",
+                    "file_paths": [
+                      "^/opt/homebrew/bin/mpv$"
+                    ],
+                    "bundle_identifiers": [
+                      "^io\\.mpv$"
+                    ]
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "product_id": 45057,
+                        "vendor_id": 13651
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "c"
+                },
+                "to": [
+                  {
+                    "key_code": "fastforward"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_if",
+                    "file_paths": [
+                      "^/opt/homebrew/bin/mpv$"
+                    ],
+                    "bundle_identifiers": [
+                      "^io\\.mpv$"
+                    ]
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "product_id": 45057,
+                        "vendor_id": 13651
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "c"
+                },
+                "to": [
+                  {
+                    "key_code": "m",
+                    "modifiers": [
+                      "left_command",
+                      "left_shift"
+                    ]
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_if",
+                    "bundle_identifiers": [
+                      "^com.microsoft.teams2$"
+                    ]
+                  },
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "product_id": 45057,
+                        "vendor_id": 13651
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "a",
+                  "modifiers": {
+                    "mandatory": [
+                      "left_option"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "caps_lock"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "product_id": 45057,
+                        "vendor_id": 13651
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "a"
+                },
+                "to": [
+                  {
+                    "key_code": "left_command",
+                    "modifiers": [
+                      "option",
+                      "control",
+                      "shift"
+                    ]
+                  }
+                ],
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "product_id": 45057,
+                        "vendor_id": 13651
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "b"
+                },
+                "to": [
+                  {
+                    "key_code": "m",
+                    "modifiers": [
+                      "command",
+                      "option",
+                      "control",
+                      "shift"
+                    ]
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "product_id": 45057,
+                        "vendor_id": 13651
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "c"
+                },
+                "to": [
+                  {
+                    "key_code": "left_command"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "product_id": 45057,
+                        "vendor_id": 13651
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "parameters": {
+          "basic.to_if_alone_timeout_milliseconds": 1000,
+          "basic.to_if_held_down_threshold_milliseconds": 500,
+          "basic.to_delayed_action_delay_milliseconds": 500,
+          "basic.simultaneous_threshold_milliseconds": 50,
+          "mouse_motion_to_scroll.speed": 100
+        }
+      },
+      "devices": [
+        {
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 45133,
+            "vendor_id": 7185
+          },
+          "manipulate_caps_lock_led": false,
+          "simple_modifications": [
+            {
+              "from": {
+                "key_code": "application"
+              },
+              "to": [
+                {
+                  "key_code": "fn"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "identifiers": {
+            "is_keyboard": true,
+            "is_pointing_device": true,
+            "product_id": 45057,
+            "vendor_id": 13651
+          },
+          "ignore": false,
+          "manipulate_caps_lock_led": false
+        }
+      ],
+      "fn_function_keys": [
+        {
+          "from": {
+            "key_code": "f1"
+          },
+          "to": [
+            {
+              "key_code": "display_brightness_decrement"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f2"
+          },
+          "to": [
+            {
+              "key_code": "display_brightness_increment"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f3"
+          },
+          "to": [
+            {
+              "key_code": "mission_control"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f4"
+          },
+          "to": [
+            {
+              "key_code": "launchpad"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f5"
+          },
+          "to": [
+            {
+              "key_code": "illumination_decrement"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f6"
+          },
+          "to": [
+            {
+              "key_code": "illumination_increment"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f7"
+          },
+          "to": [
+            {
+              "key_code": "rewind"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f8"
+          },
+          "to": [
+            {
+              "key_code": "play_or_pause"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f9"
+          },
+          "to": [
+            {
+              "key_code": "fastforward"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f10"
+          },
+          "to": [
+            {
+              "key_code": "mute"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f11"
+          },
+          "to": [
+            {
+              "key_code": "volume_decrement"
+            }
+          ]
+        },
+        {
+          "from": {
+            "key_code": "f12"
+          },
+          "to": [
+            {
+              "key_code": "volume_increment"
+            }
+          ]
+        }
+      ],
+      "name": "Default",
+      "selected": true,
+      "simple_modifications": [
+        {
+          "from": {
+            "key_code": "application"
+          },
+          "to": [
+            {
+              "key_code": "fn"
+            }
+          ]
+        }
+      ],
+      "virtual_hid_keyboard": {
+        "caps_lock_delay_milliseconds": 0,
+        "keyboard_type": "ansi",
+        "keyboard_type_v2": "ansi"
+      }
+    }
+  ]
+}

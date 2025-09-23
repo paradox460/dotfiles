@@ -1,0 +1,66 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+# Username, gpg key, and other per-machine settings are in ./conf.d/local.toml
+
+[signing]
+behavior = "own"
+backend = "gpg"
+
+[revsets]
+log = 'present(@) | ancestors(immutable_heads().., 5) | present(trunk())'
+
+[ui]
+default-command = "log"
+diff-formatter = "difft"
+diff-editor = ":builtin"
+
+[aliases]
+e = ["edit"]
+p = ["git", "push"]
+n = ["new"]
+bu = ["bookmark", "move", "--from", "closest_main(@-)", "--to", "@-"]
+d = ["describe"]
+s = ["show"]
+a = ["abandon"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+g = ['git']
+
+[revset-aliases]
+'local_trunk()' = '''
+latest(
+  bookmarks(exact:"main") |
+  bookmarks(exact:"master") |
+  bookmarks(exact:"trunk") |
+  root()
+)
+'''
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'closest_main(to)' = "heads(::to & (bookmarks(exact:'main')|bookmarks(exact:'master')))"
+'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
+
+[templates]
+git_push_bookmark = '"jeffs/push/" ++ change_id.short()'
+
+[template-aliases]
+"format_timestamp(timestamp)" = """
+if(timestamp.before("1 week ago"),
+timestamp,
+timestamp.ago()
+)
+"""
+
+[fsmonitor]
+backend = "watchman"
+
+[fsmonitor.watchman]
+register-snapshot-trigger = true
+
+[merge-tools.ksdiff]
+diff-invocation-mode = "file-by-file"
+diff-args = ["--partial-changeset", "$left", "$right"]
+merge-args = ["--merge", "--output", "$output", "--base", "$base", "$left", "$right"]
+
+[git]
+private-commits = "description(glob:'private:*')"
+colocate = true
+write-change-id-header = true

@@ -1,0 +1,96 @@
+#!/usr/bin/env sh
+
+# Mode definitions
+:: default : hs -c "hs.alert('Default')"; yabai -m config window_border off; yabai -m config window_opacity off
+:: switcher @ : hs -c "hs.alert('Switcher')"; yabai -m config window_border on; yabai -m config window_opacity on
+:: swap @ : hs -c "hs.alert('Swap')"; yabai -m config window_border on; yabai -m config window_opacity on
+:: layout @ : hs -c "hs.alert('Layout')"; yabai -m config window_border on; yabai -m config window_opacity on
+
+# Mode escape hatch
+swap, layout < escape ; switcher
+switcher < escape ; default
+switcher, swap, layout < shift - escape ; default
+
+# Switcher mode
+hyper - f ; switcher
+
+switcher < a ; swap
+switcher < s ; layout
+
+# Config change reloaders
+switcher < r : hs -c "hs.alert('Reloading skhd')"; yabai -m config window_border off; yabai -m config window_opacity off; skhd -r
+switcher < shift - r : hs -c "hs.alert('Restarting yabai')"; pkill yabai
+
+# Switcher move focus
+switcher < h : yabai -m window --focus west
+switcher < j : yabai -m window --focus south
+switcher < k : yabai -m window --focus north
+switcher < l : yabai -m window --focus east
+
+switcher < n :  yabai -m display --focus prev
+switcher < m : yabai -m display --focus next
+
+
+# Layout Mode
+layout < a : yabai -m space --layout bsp; hs -c "hs.alert('BSP')"
+layout < s : yabai -m space --layout stack; hs -c "hs.alert('Stack')"
+layout < d : yabai -m space --layout float; hs -c "hs.alert('Float')"
+
+layout < r : yabai -m space --rotate 90
+
+layout < x : yabai -m space --mirror x-axis
+layout < c : yabai -m space --mirror y-axis
+
+layout < b : yabai -m space --balance
+
+# Window specific layout commands
+layout < p : yabai -m window --toggle sticky;\
+             yabai -m window --toggle topmost;\
+             yabai -m window --toggle pip;\
+             yabai -m window --toggle float
+
+layout < z : yabai -m window --toggle zoom-fullscreen
+layout < f : yabai -m window --toggle float
+
+layout < h : yabai -m window --resize left:20:0
+layout < j : yabai -m window --resize bottom:0:20
+layout < k : yabai -m window --resize top:0:20
+layout < l : yabai -m window --resize right:20:0
+
+layout < shift - h : yabai -m window --resize left:-20:0
+layout < shift - j : yabai -m window --resize bottom:0:-20
+layout < shift - k : yabai -m window --resize top:0:-20
+layout < shift - l : yabai -m window --resize right:-20:0
+
+
+# Swap commands
+swap < h : yabai -m window --swap west
+swap < j : yabai -m window --swap south
+swap < k : yabai -m window --swap north
+swap < l : yabai -m window --swap east
+swap < x : yabai -m window --swap mouse
+
+swap < alt - h :  yabai -m window --insert west
+swap < alt - j :  yabai -m window --insert south
+swap < alt - k :  yabai -m window --insert north
+swap < alt - l :  yabai -m window --insert east
+swap < alt - s :  yabai -m window --insert stack
+
+swap < shift - h : yabai -m window --stack west
+swap < shift - j : yabai -m window --stack south
+swap < shift - k : yabai -m window --stack north
+swap < shift - l : yabai -m window --stack east
+swap < shift - x : yabai -m window --stack mouse
+
+swap < cmd - h : yabai -m window --warp west
+swap < cmd - j : yabai -m window --warp south
+swap < cmd - k : yabai -m window --warp north
+swap < cmd - l : yabai -m window --warp east
+swap < cmd - x : yabai -m window --warp mouse
+
+swap < n :  yabai -m window --display prev; yabai -m display --focus prev
+swap < m : yabai -m window --display next; yabai -m display --focus next
+swap < 1 :  yabai -m window --display 1; yabai -m display --focus 1
+swap < 2 : yabai -m window --display 2; yabai -m display --focus 2
+swap < 2 : yabai -m window --display 2; yabai -m display --focus 2
+swap < 4 : yabai -m window --display 4; yabai -m display --focus 4

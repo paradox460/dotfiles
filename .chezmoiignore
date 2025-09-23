@@ -1,0 +1,6 @@
+**/.git
+**/.vscode
+ignored/
+ignored/**
+**/chezmoi_*
+README.md

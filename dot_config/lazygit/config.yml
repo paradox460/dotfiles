@@ -1,0 +1,13 @@
+gui:
+  expandFocusedSidePanel: true
+  showRandomTip: false
+  showFileTree: false
+  branchColors:
+    'jeffs': 'cyan'
+confirmOnQuit: true
+quitOnTopLevelReturn: false
+keybinding:
+  universal:
+    quit: Q
+    quitWithoutChangingDirectory: <c-q>
+    return-alt1: q # tig style q
