@@ -1,0 +1,10 @@
+name: Sync Mirrors
+'on':
+  push: {}
+jobs:
+  mirror:
+    uses: paradox460/workflows/.github/workflows/tangled.yml@main
+    secrets:
+      ssh_key: "${{ secrets.TANGLED_SSH_KEY }}"
+    with:
+      remote_repo: paradox.tngl.sh/dotfiles
