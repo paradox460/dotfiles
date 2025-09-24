@@ -1,7 +1,6 @@
 "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
 
 # Username, gpg key, and other per-machine settings are in ./conf.d/local.toml
-
 [signing]
 behavior = "own"
 backend = "gpg"
@@ -11,8 +10,12 @@ log = 'present(@) | ancestors(immutable_heads().., 5) | present(trunk())'
 
 [ui]
 default-command = "log"
-diff-formatter = "difft"
 diff-editor = ":builtin"
+diff-formatter = ":git" # required by `delta`
+pager=["delta", "--pager", "less -FRX"] # Keeps output from the terminal after closing the pager
+
+[diff]
+tool = "delta"
 
 [aliases]
 e = ["edit"]
@@ -64,3 +67,11 @@ merge-args = ["--merge", "--output", "$output", "--base", "$base", "$left", "$ri
 private-commits = "description(glob:'private:*')"
 colocate = true
 write-change-id-header = true
+
+
+# These options allow for `jj diff` and `jj show` to clear the output from the terminal after closing the pager.
+[[--scope]]
+--when.commands = ["diff", "show"]
+
+[--scope.ui]
+pager = "delta"
