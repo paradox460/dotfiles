@@ -1,0 +1,5 @@
+#!/usr/bin/env fish
+
+# plugins hash: {{ include "dot_vim/config/plugins.vim" | sha256sum}}
+
+nvim -c "PlugInstall" -c "PlugClean" -c "qa!"
