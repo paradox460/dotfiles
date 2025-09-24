@@ -1,3 +1,4 @@
+{{- if eq .chezmoi.os "darwin" -}}
 #! /usr/bin/env fish
 argparse -i 'a/all' 'e/edit' -- $argv
 set -l urls
@@ -17,3 +18,5 @@ if test -n "$urls"
 echo
   echo "Nothing to do"
 end
+
+{{ end -}}

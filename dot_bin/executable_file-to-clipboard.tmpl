@@ -1,6 +1,9 @@
+{{- if eq .chezmoi.os "darwin" -}}
 #! /usr/bin/env fish
 set -l path (realpath $argv[1])
 osascript -e "on run args" \
           -e 'set the clipboard to POSIX file (first item of args)' \
           -e "end" \
           $path
+
+{{ end -}}

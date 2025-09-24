@@ -10,10 +10,15 @@ alias ff_frames 'ffprobe -v error -select_streams v:0 -count_frames -show_entrie
 
 alias lg 'lazygit'
 
-alias yoink 'open -a Yoink'
+{{ $sed := eq .chezmoi.os "darwin" | ternary "gsed" "sed" }}
 
-alias current-issue 'git rev-parse --abbrev-ref HEAD | gsed -E "s/.*\/(.*?)\/.*/\1/"'
+alias current-issue 'git rev-parse --abbrev-ref HEAD | {{ $sed }} -E "s/.*\/(.*?)\/.*/\1/"'
 
 alias zq 'zoxide query'
 
+
+{{ if eq .chezmoi.os "darwin" }}
+# macos only
 alias kbm '/Applications/Keyboard\ Maestro.app/Contents/MacOS/keyboardmaestro'
+alias yoink 'open -a Yoink'
+{{- end}}

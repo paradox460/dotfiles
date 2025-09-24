@@ -1,3 +1,4 @@
+{{- if eq .chezmoi.os "darwin" -}}
 #! /usr/bin/env fish
 argparse -i 'a/all' 'e/edit' 'f/file=' -- $argv
 set -l urls
@@ -22,3 +23,5 @@ if test -n "$_flag_f"
 else
   yt-dlp -i -a (string join \n $urls | psub) $argv
 end
+
+{{ end -}}
