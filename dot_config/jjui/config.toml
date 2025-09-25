@@ -53,6 +53,7 @@ enabled = true
 
 [keys]
 split = ["S"]
+force_apply = ["alt+enter"]
 
 [keys.preview]
 half_page_down = ["ctrl+d", "pgdown"]
