@@ -1,4 +1,5 @@
 abbr --add --set-cursor gcbj "git checkout -b jeffs/%"
+abbr --add cz "chezmoi"
 abbr --add g "git"
 abbr --add gc "git checkout"
 abbr --add gcb "git checkout -b"
