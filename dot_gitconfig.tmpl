@@ -135,3 +135,7 @@
 [credential "https://gist.github.com"]
   helper =
   helper = !/opt/homebrew/bin/gh auth git-credential
+
+{{ if and .workMachine (stat (joinPath .chezmoi.homeDir "/.gitconfig.work.tmpl")) -}}
+{{includeTemplate (joinPath .chezmoi.homeDir "/.gitconfig.work.tmpl")}}
+{{ end -}}

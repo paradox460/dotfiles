@@ -6,6 +6,7 @@
   name = {{ $name | quote}}
   email = {{ $email | quote }}
   gpgSig = {{ $gpgSig | quote }}
+  workMachine = {{ promptBoolOnce . "workMachine" "Is this a work machine?" false}}
 
 [diff]
     pager = "delta"
