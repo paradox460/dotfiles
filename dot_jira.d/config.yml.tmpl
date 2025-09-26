@@ -1,0 +1,26 @@
+endpoint: {{ .jira.endpoint }}
+login: {{ .jira.login }}
+password-source: keyring
+custom-commands:
+  - name: "v"
+    script: |-
+      ISSUE=`git rev-parse --abbrev-ref HEAD | gsed -E "s/.*\/(.*?)\/.*/\1/"`
+      {{`{{jira}} view $ISSUE $args`}}
+  - name: "c"
+    script: |-
+      ISSUE=`git rev-parse --abbrev-ref HEAD | gsed -E "s/.*\/(.*?)\/.*/\1/"`
+      {{`{{jira}} comment $ISSUE`}}
+  - name: "pr"
+    script: |-
+      ISSUE=`git rev-parse --abbrev-ref HEAD | gsed -E "s/.*\/(.*?)\/.*/\1/"`
+      {{`{{jira}} transition --noedit "Open PR" $ISSUE`}}
+  - name: "mine"
+    script: |-
+      {{`{{jira}} list --template table --query "resolution = unresolved and assignee=currentuser() ORDER BY priority asc, created"`}}
+  - name: "ts"
+    args:
+      - name: ISSUE
+        help: Take and Start an issue at once
+        required: true
+    script: |-
+      {{`{{jira}} take {{args.ISSUE}}; {{jira}} transition --noedit "In Progress" {{args.ISSUE}}`}}
