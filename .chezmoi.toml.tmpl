@@ -1,16 +1,19 @@
 {{- $name := promptStringOnce . "name" "Your Name" -}}
 {{- $email := promptStringOnce . "email" "Email Address" -}}
 {{- $gpgSig := promptStringOnce . "gpgSig" "GPG Signature" -}}
+{{- $workMachine := promptBoolOnce . "workMachine" "Is this a work machine?" false -}}
 
 [data]
   name = {{ $name | quote}}
   email = {{ $email | quote }}
   gpgSig = {{ $gpgSig | quote }}
-  workMachine = {{ promptBoolOnce . "workMachine" "Is this a work machine?" false}}
+  workMachine = {{ $workMachine }}
 
+{{- if $workMachine }}
 [data.jira]
   endpoint = {{ promptStringOnce . "jiraEndpoint" "Jira Endpoint" | quote }}
   login = {{ promptStringOnce . "jiraLogin" "Jira Login" | quote }}
+{{- end }}
 
 [diff]
     pager = "delta"
