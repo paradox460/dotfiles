@@ -8,7 +8,6 @@ set -l bookmarks
 
 set -q _flag_dry_run; and set dry_run "--dry-run"
 
-# If we have -c set, skip automatic bookmark creation, and discard all `-r` options
 if set -q _flag_change
   set -a push_args -N
   for rev in $_flag_change
@@ -31,6 +30,7 @@ else
 end
 
 for bookmark in $bookmarks
+  jj git push -b $bookmark
   echo (set_color --bold cyan)"Opening PR for $bookmark"(set_color reset)
   jj log -r "trunk()..$bookmark"
   gh pr create $dry_run -H $bookmark $argv
