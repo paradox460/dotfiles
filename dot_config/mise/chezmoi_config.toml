@@ -19,6 +19,7 @@ node = "latest"
 uv = "latest"
 python = "latest"
 "pipx:jiratui" = "latest"
+"npm:@shift-code/cli" = "latest"
 
 [settings]
 jobs = 8
