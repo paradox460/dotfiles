@@ -18,16 +18,16 @@ pager=["delta", "--pager", "less -FRX"] # Keeps output from the terminal after c
 tool = "delta"
 
 [aliases]
-e = ["edit"]
-p = ["git", "push"]
-n = ["new"]
+a = ["abandon"]
 bu = ["bookmark", "move", "--from", "closest_main(@-)", "--to", "@-"]
 d = ["describe"]
-s = ["show"]
-a = ["abandon"]
-tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+e = ["edit"]
 g = ['git']
+n = ["new"]
+p = ["git", "push"]
 rebase-all = ["rebase", "-s", "(::trunk())+ & mutable()", "-d", "trunk()"]
+s = ["show"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
 
 [revset-aliases]
 'local_trunk()' = '''
