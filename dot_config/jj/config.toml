@@ -27,6 +27,7 @@ s = ["show"]
 a = ["abandon"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
 g = ['git']
+rebase-all = ["rebase", "-s", "(::trunk())+ & mutable()", "-d", "trunk()"]
 
 [revset-aliases]
 'local_trunk()' = '''
