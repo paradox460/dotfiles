@@ -1,5 +1,5 @@
 #! /usr/bin/env fish
-argparse 't/tmp' 'c/copy' 'y/yoink' 'o/output=' 'm/mute' 'crf=' -- $argv
+argparse 't/tmp' 'c/copy' 'y/yoink' 'o/output=' 'm/mute' 'crf=' 'e/epoch' -- $argv
 
 if set -q _flag_copy; or set -q _flag_output; and test (count $argv) -gt 1
   echo "Only works with one file at a time, exiting" >&2
@@ -13,6 +13,9 @@ end
 for i in $argv
   set -l ext (string split --right --max 1 '.' -- $i)[-1]
   set -l newname (basename $i "."$ext | string replace -r '\.[hx]265' '' )'.mp4'
+  if set -q _flag_epoch
+    set newname (date +%s).mp4
+  end
   if set -q _flag_output
     set newname $_flag_output
   end
