@@ -1,0 +1,72 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "scroll_beyond_last_line": "vertical_scroll_margin",
+  "icon_theme": "Colored Zed Icons Theme Dark",
+  "agent": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4.1"
+    },
+    "model_parameters": []
+  },
+  "features": {
+    "edit_prediction_provider": "copilot"
+  },
+  "prettier": {
+    "allowed": true
+  },
+  "inlay_hints": {
+    "enabled": true
+  },
+  "show_whitespaces": "boundary",
+  "format_on_save": "off",
+  "indent_guides": {
+    "coloring": "indent_aware",
+    "background_coloring": "indent_aware"
+  },
+  "soft_wrap": "editor_width",
+  "tab_size": 2,
+  "minimap": {
+    "show": "auto"
+  },
+  "relative_line_numbers": true,
+  "show_signature_help_after_edits": false,
+  "auto_signature_help": true,
+  "helix_mode": false,
+  "vim_mode": true,
+  "unnecessary_code_fade": 0.4000000059604645,
+  "buffer_font_family": "JetBrains Mono",
+  "confirm_quit": true,
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "wrap_guides": [80, 120],
+  "theme": {
+    "mode": "system",
+    "light": "Tomorrow",
+    "dark": "Tomorrow Night"
+  },
+  "languages": {
+    "Elixir": {
+      "language_servers": [
+        "expert",
+        "!elixir-ls",
+        "!next-ls",
+        "!lexical",
+        "..."
+      ]
+    }
+  },
+  "vim": {
+    "use_system_clipboard": "on_yank",
+    "use_smartcase_find": true,
+    "toggle_relative_line_numbers": true,
+
+  }
+}
