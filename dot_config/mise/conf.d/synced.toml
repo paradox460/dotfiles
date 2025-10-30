@@ -1,22 +1,17 @@
+# These configs are things that I want on every machine I use
+# Local configs should go in the ~/.config/mise/config.toml file
 [tools]
 "cargo:cargo-generate" = "latest"
 "cargo:lucky_commit" = "latest"
 "cargo:sd" = "latest"
 "cargo:spurdify" = "latest"
-bun = "latest"
 cargo-binstall = "latest"
 cosign = "latest"
-deno = "latest"
-elixir = "latest"
-erlang = "latest"
 rust = "stable"
 slsa-verifier = "latest"
 usage = "latest"
-pkl = "latest"
 watchexec = "latest"
-node = "latest"
-uv = "latest"
-python = "latest"
+
 
 [settings]
 jobs = 8
