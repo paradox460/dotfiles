@@ -13,8 +13,8 @@ if set -q _flag_change
   for rev in $_flag_change
     set -a push_args -c $rev
   end
-  echo $bookmarks
-  jj git push $dry_run $argv &| read -z push_result
+  jj git push $dry_run $push_args &| read -z push_result
+  echo $push_result
 
   string match -q -g --all --regex  "Add bookmark (?<bookmarks>.*)\*? to" $push_result
 else
