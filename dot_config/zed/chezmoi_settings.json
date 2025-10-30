@@ -20,7 +20,7 @@
     "edit_prediction_provider": "copilot"
   },
   "prettier": {
-    "allowed": true
+    "allowed": false
   },
   "inlay_hints": {
     "enabled": true
@@ -45,7 +45,7 @@
   "buffer_font_family": "JetBrains Mono",
   "confirm_quit": true,
   "ui_font_size": 16,
-  "buffer_font_size": 15,
+  "buffer_font_size": 14.0,
   "wrap_guides": [80, 120],
   "theme": {
     "mode": "system",
