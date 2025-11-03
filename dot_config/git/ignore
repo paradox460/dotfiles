@@ -32,11 +32,11 @@ Temporary Items
 # Emacs
 .dir-locals.el
 
-# Elixir-ls
+# Elixir language servers
 .elixir_ls
-
-# Elixir-tools
 .elixir-tools
+.expert
+.lexical
 
 # VsCode
 .vscode/
