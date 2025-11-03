@@ -44,5 +44,15 @@
     "bindings": {
       "shift-x": "vim::Exchange"
     }
+  },
+  // Subword navigation
+  {
+    "context": "VimControl && !menu && vim_mode != operator",
+    "bindings": {
+      "w": "vim::NextSubwordStart",
+      "b": "vim::PreviousSubwordStart",
+      "e": "vim::NextSubwordEnd",
+      "g e": "vim::PreviousSubwordEnd"
+    }
   }
 ]
