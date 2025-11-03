@@ -54,5 +54,23 @@
       "e": "vim::NextSubwordEnd",
       "g e": "vim::PreviousSubwordEnd"
     }
-  }
+  },
+  // Launch lazygit or JJ
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      "g \\ j": [
+        "task::Spawn",
+        {
+          "task_name": "jjui"
+        }
+      ],
+      "g \\ g": [
+        "task::Spawn",
+        {
+          "task_name": "LazyGit"
+        }
+      ]
+    }
+  },
 ]
