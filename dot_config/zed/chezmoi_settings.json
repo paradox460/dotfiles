@@ -46,12 +46,16 @@
   "confirm_quit": true,
   "ui_font_size": 16,
   "buffer_font_size": 14.0,
-  "wrap_guides": [80, 120],
+  "wrap_guides": [
+    80,
+    120
+  ],
   "theme": {
     "mode": "system",
     "light": "Tomorrow",
     "dark": "Tomorrow Night"
   },
+  "autosave": "on_focus_change",
   "languages": {
     "Elixir": {
       "language_servers": [
@@ -67,6 +71,5 @@
     "use_system_clipboard": "on_yank",
     "use_smartcase_find": true,
     "toggle_relative_line_numbers": true,
-
   }
 }
