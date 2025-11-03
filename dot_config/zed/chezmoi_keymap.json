@@ -18,18 +18,19 @@
       // "j k": "vim::NormalBefore"
     }
   },
+  // Mini/Anyquotes binds
   {
     "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
     "bindings": {
       // Traditional Vim behavior
       "Q": "vim::AnyQuotes",
       "B": "vim::AnyBrackets",
-
       // mini.ai plugin behavior
       "q": "vim::MiniQuotes",
       "b": "vim::MiniBrackets"
     }
   },
+  // Sneak
   {
     "context": "vim_mode == normal || vim_mode == visual",
     "bindings": {
@@ -37,6 +38,7 @@
       "shift-s": "vim::PushSneakBackward"
     }
   },
+  // Exchange
   {
     "context": "vim_mode == visual",
     "bindings": {
