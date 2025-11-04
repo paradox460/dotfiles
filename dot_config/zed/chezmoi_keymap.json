@@ -55,6 +55,17 @@
       "g e": "vim::PreviousSubwordEnd"
     }
   },
+  // Navigate between anything, not just panes
+  {
+    "context": "Dock",
+    "bindings": {
+      "ctrl-w h": "workspace::ActivatePaneLeft",
+      "ctrl-w l": "workspace::ActivatePaneRight",
+      "ctrl-w k": "workspace::ActivatePaneUp",
+      "ctrl-w j": "workspace::ActivatePaneDown"
+      // ... or other keybindings
+    }
+  },
   // Launch lazygit or JJ
   {
     "context": "Editor && vim_mode == normal",
