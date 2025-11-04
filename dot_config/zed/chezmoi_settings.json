@@ -36,6 +36,9 @@
   "minimap": {
     "show": "auto"
   },
+  "tabs": {
+    "file_icons": true
+  },
   "relative_line_numbers": true,
   "show_signature_help_after_edits": false,
   "auto_signature_help": true,
