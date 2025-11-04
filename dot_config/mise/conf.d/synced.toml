@@ -16,6 +16,8 @@ watchexec = "latest"
 [settings]
 jobs = 8
 experimental = true
+# Docker makes a _far_ better portable postgres setup
+disable_tools = ["postgres"]
 
 [settings.npm]
 bun = true
