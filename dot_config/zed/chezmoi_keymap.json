@@ -59,18 +59,18 @@
   {
     "context": "Editor && vim_mode == normal",
     "bindings": {
-      "g \\ j": [
+      "space j": [
         "task::Spawn",
         {
           "task_name": "jjui"
         }
       ],
-      "g \\ g": [
+      "space g": [
         "task::Spawn",
         {
           "task_name": "LazyGit"
         }
       ]
     }
-  },
+  }
 ]
