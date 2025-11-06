@@ -74,5 +74,14 @@
     "use_system_clipboard": "on_yank",
     "use_smartcase_find": true,
     "toggle_relative_line_numbers": true,
+  },
+  "calls": {
+    "mute_on_join": true
+  },
+  "use_smartcase_search": true,
+  "preview_tabs": {
+    "enabled": true,
+    "enable_preview_from_code_navigation": true,
+    "enable_preview_from_file_finder": true
   }
 }
