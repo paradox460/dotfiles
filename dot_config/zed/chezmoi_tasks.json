@@ -5,11 +5,15 @@
   "shell": {
     "program": "sh"
   },
+  "env": {
+    "EDITOR": "zed -w",
+    "VISUAL": "zed -w"
+  },
   "hide": "on_success",
   "reveal_target": "center",
   "show_summary": false,
   "show_command": false,
-  "allow_concurrent_runs": true,
+  "allow_concurrent_runs": false,
   "use_new_terminal": true
 },
 {
@@ -18,11 +22,15 @@
   "shell": {
     "program": "sh"
   },
+  "env": {
+    "EDITOR": "zed -w",
+    "VISUAL": "zed -w"
+  },
   "hide": "on_success",
   "reveal_target": "center",
   "show_summary": false,
   "show_command": false,
-  "allow_concurrent_runs": true,
+  "allow_concurrent_runs": false,
   "use_new_terminal": true
 }
 ]
