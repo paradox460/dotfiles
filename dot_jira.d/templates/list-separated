@@ -1,2 +1,0 @@
-{{ range .issues }}{{ .key | printf "%s"}}{{"\t"}}{{ .fields.summary }}
-{{ end }}

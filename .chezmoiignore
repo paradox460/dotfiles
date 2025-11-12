@@ -4,7 +4,3 @@ ignored/
 ignored/**
 **/chezmoi_*
 README.md
-{{- if not .workMachine }}
-.jira.d/
-.jira.d/**
-{{- end }}

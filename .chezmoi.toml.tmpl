@@ -9,11 +9,5 @@
   gpgSig = {{ $gpgSig | quote }}
   workMachine = {{ $workMachine }}
 
-{{- if $workMachine }}
-[data.jira]
-  endpoint = {{ promptStringOnce . "jiraEndpoint" "Jira Endpoint" | quote }}
-  login = {{ promptStringOnce . "jiraLogin" "Jira Login" | quote }}
-{{- end }}
-
 [diff]
     pager = "delta"
