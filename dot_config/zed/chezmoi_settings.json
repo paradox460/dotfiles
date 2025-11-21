@@ -39,7 +39,7 @@
   "tabs": {
     "file_icons": true
   },
-  "relative_line_numbers": true,
+  "relative_line_numbers": "enabled",
   "show_signature_help_after_edits": false,
   "auto_signature_help": true,
   "helix_mode": false,
@@ -83,5 +83,8 @@
     "enabled": true,
     "enable_preview_from_code_navigation": true,
     "enable_preview_from_file_finder": true
+  },
+  "terminal": {
+    "option_as_meta": true
   }
 }
