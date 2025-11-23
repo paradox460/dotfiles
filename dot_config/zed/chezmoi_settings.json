@@ -7,58 +7,33 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "scroll_beyond_last_line": "vertical_scroll_margin",
-  "icon_theme": "Colored Zed Icons Theme Dark",
   "agent": {
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4.1"
+      "model": "gpt-4.1",
+      "provider": "copilot_chat"
     },
     "model_parameters": []
   },
+  "autosave": "on_focus_change",
+  "buffer_font_family": "JetBrains Mono",
+  "buffer_font_size": 14.0,
+  "calls": {
+    "mute_on_join": true
+  },
+  "confirm_quit": true,
   "features": {
     "edit_prediction_provider": "copilot"
   },
-  "prettier": {
-    "allowed": false
-  },
+  "format_on_save": "off",
+  "helix_mode": false,
+  "icon_theme": "Colored Zed Icons Theme Dark",
   "inlay_hints": {
     "enabled": true
   },
-  "show_whitespaces": "boundary",
-  "format_on_save": "off",
   "indent_guides": {
-    "coloring": "indent_aware",
-    "background_coloring": "indent_aware"
+    "background_coloring": "indent_aware",
+    "coloring": "indent_aware"
   },
-  "soft_wrap": "editor_width",
-  "tab_size": 2,
-  "minimap": {
-    "show": "auto"
-  },
-  "tabs": {
-    "file_icons": true
-  },
-  "relative_line_numbers": "enabled",
-  "show_signature_help_after_edits": false,
-  "auto_signature_help": true,
-  "helix_mode": false,
-  "vim_mode": true,
-  "unnecessary_code_fade": 0.4000000059604645,
-  "buffer_font_family": "JetBrains Mono",
-  "confirm_quit": true,
-  "ui_font_size": 16,
-  "buffer_font_size": 14.0,
-  "wrap_guides": [
-    80,
-    120
-  ],
-  "theme": {
-    "mode": "system",
-    "light": "Tomorrow",
-    "dark": "Tomorrow Night"
-  },
-  "autosave": "on_focus_change",
   "languages": {
     "Elixir": {
       "language_servers": [
@@ -70,21 +45,53 @@
       ]
     }
   },
-  "vim": {
-    "use_system_clipboard": "on_yank",
-    "use_smartcase_find": true,
-    "toggle_relative_line_numbers": true,
+  "lsp": {
+    "tinymist": {
+      "settings": {
+        "exportPdf": "onSave",
+        "outputPath": "$root/$name"
+      }
+    }
   },
-  "calls": {
-    "mute_on_join": true
+  "minimap": {
+    "show": "auto"
   },
-  "use_smartcase_search": true,
+  "prettier": {
+    "allowed": false
+  },
   "preview_tabs": {
-    "enabled": true,
     "enable_preview_from_code_navigation": true,
-    "enable_preview_from_file_finder": true
+    "enable_preview_from_file_finder": true,
+    "enabled": true
+  },
+  "relative_line_numbers": "enabled",
+  "scroll_beyond_last_line": "vertical_scroll_margin",
+  "show_signature_help_after_edits": false,
+  "show_whitespaces": "boundary",
+  "soft_wrap": "editor_width",
+  "tab_size": 2,
+  "tabs": {
+    "file_icons": true
   },
   "terminal": {
     "option_as_meta": true
-  }
+  },
+  "theme": {
+    "dark": "Tomorrow Night",
+    "light": "Tomorrow",
+    "mode": "system"
+  },
+  "ui_font_size": 16,
+  "unnecessary_code_fade": 0.4000000059604645,
+  "use_smartcase_search": true,
+  "vim": {
+    "toggle_relative_line_numbers": true,
+    "use_smartcase_find": true,
+    "use_system_clipboard": "on_yank"
+  },
+  "vim_mode": true,
+  "wrap_guides": [
+    80,
+    120
+  ]
 }
