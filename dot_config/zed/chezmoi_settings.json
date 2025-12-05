@@ -8,8 +8,9 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "agent": {
+    "enable_feedback": false,
     "default_model": {
-      "model": "gpt-4.1",
+      "model": "claude-sonnet-4.5",
       "provider": "copilot_chat"
     },
     "model_parameters": []
@@ -20,6 +21,7 @@
   "calls": {
     "mute_on_join": true
   },
+  "colorize_brackets": true,
   "confirm_quit": true,
   "features": {
     "edit_prediction_provider": "copilot"
@@ -27,19 +29,19 @@
   "format_on_save": "off",
   "helix_mode": false,
   "icon_theme": "Colored Zed Icons Theme Dark",
-  "inlay_hints": {
-    "enabled": true
-  },
   "indent_guides": {
     "background_coloring": "indent_aware",
     "coloring": "indent_aware"
+  },
+  "inlay_hints": {
+    "enabled": true
   },
   "languages": {
     "Elixir": {
       "language_servers": [
         "expert",
         "!elixir-ls",
-        "!next-ls",
+        "next-ls",
         "!lexical",
         "..."
       ]
