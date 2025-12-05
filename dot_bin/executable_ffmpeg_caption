@@ -1,0 +1,46 @@
+#!/usr/bin/env fish
+
+argparse -i "e/edit" "f/force" "sidecar" "nomux" "format" -- $argv
+
+set -l model "/Users/jeffsandberg/.cache/huggingface/hub/models--ggerganov--whisper.cpp/snapshots/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-large-v3-turbo-q8_0.bin"
+
+for file in $argv
+  echo $file
+  set file (path resolve $file)
+
+  if not set -q _flag_force
+    set -l has_subs (ffprobe -v error -select_streams s -show_entries stream=index -of csv=p=0 $file)
+    if test -n "$has_subs"
+      echo (set_color red)"$file already has subtitles, skipping."(set_color normal)
+      continue
+    end
+  end
+
+  set -l sub_file (mktemp)
+  if set -q _flag_sidecar
+    set sub_file (path dirname $file)/(path basename -E $file).srt
+  end
+
+  set -S sub_file
+
+  set -l sub_mux (path dirname $file)/(path basename -E $file)_subbed.mkv
+  echo (set_color green)"    Generating subtitles..."(set_color normal)
+  ffmpeg -i $file -vn -af "whisper=model=$model:language=en:queue=30:destination='$sub_file':format=srt" -f null -
+
+  if set -q _flag_edit
+    echo '{ "command": ["loadfile", "'$file'"] }' | socat - /tmp/mpvsocket1
+    $EDITOR $sub_file; or continue
+  end
+
+  if not set -q _flag_nomux
+
+    echo (set_color green)"    Muxing subtitles..."(set_color normal)
+
+    set -l subtitle_encode
+    if test (path extension $file) = ".webm"
+      set subtitle_encode -c:s webvtt
+    end
+
+    ffmpeg -y -i $file -i $sub_file -c copy {$subtitle_encode} $sub_mux; or continue
+  end
+end
