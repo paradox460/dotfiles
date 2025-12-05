@@ -1,0 +1,25 @@
+[".config/mpv/script_sources/mpv-chapters"]
+type = "git-repo"
+url = "https://github.com/zxhzxhz/mpv-chapters.git"
+clone.args = ["--depth", "1"]
+
+[".config/mpv/script_sources/mpv-createchapter"]
+type = "git-repo"
+url = "https://github.com/shinchiro/mpv-createchapter.git"
+clone.args = ["--depth", "1"]
+
+[".config/mpv/script_sources/mpv-scripts"]
+type = "git-repo"
+url = "https://github.com/occivink/mpv-scripts.git"
+clone.args = ["--depth", "1"]
+
+[".config/mpv/script_sources/mpv-sponsorblock"]
+type = "git-repo"
+url = "https://github.com/po5/mpv_sponsorblock.git"
+clone.args = ["--depth", "1"]
+
+
+[".config/mpv/script_sources/paradox-scripts"]
+type = "git-repo"
+url = "https://github.com/paradox460/mpv-scripts.git"
+clone.args = ["--depth", "1"]
