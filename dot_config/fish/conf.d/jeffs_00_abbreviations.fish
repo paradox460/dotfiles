@@ -10,6 +10,7 @@ abbr --add gu "gh repo sync"
 abbr --add j "jira"
 abbr --add jbu "jj bu"
 abbr --add jp "jj git push"
+abbr --add jgi "jj git init --colocate"
 abbr --add m "mise"
 abbr --add mr "mise run"
 
