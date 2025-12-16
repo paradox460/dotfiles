@@ -8,6 +8,7 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "agent": {
+    "always_allow_tool_actions": true,
     "enable_feedback": false,
     "default_model": {
       "model": "claude-sonnet-4.5",
