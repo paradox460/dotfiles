@@ -114,12 +114,6 @@ vim.g.mapleader = ' '
 -- Set comma as the local leader key for filetype-specific mappings
 vim.g.maplocalleader = ','
 
-
--- ============================================================================
--- Plugin Management (lazy.nvim)
--- ===========================================================================
-require("config.lazy")
-
 -- ============================================================================
 -- Status Line Configuration
 -- ============================================================================
@@ -130,3 +124,14 @@ vim.opt.laststatus = 2
 -- Custom statusline format:
 -- [buffer_number] filename (readonly_flag) modified_flag filetype = line:column/total_lines percentage
 vim.opt.statusline = '[%n]\\ %f%(\\ %r%)%m\\ %y%=%4l:%02v/%L\\ %3p%%'
+
+-- ============================================================================
+-- Machine Local configuration
+-- ===========================================================================
+
+pcall(require, 'config.local')
+
+-- ============================================================================
+-- Plugin Management (lazy.nvim)
+-- ===========================================================================
+require("config.lazy")
