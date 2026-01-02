@@ -25,7 +25,7 @@ e = ["edit"]
 g = ['git']
 n = ["new"]
 p = ["git", "push"]
-rebase-all = ["rebase", "-s", "(::trunk())+ & mutable()", "-d", "trunk()"]
+rebase-all = ["rebase", "-s", "(::trunk())+ & mutable()", "--onto", "trunk()"]
 s = ["show"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
 
@@ -69,6 +69,10 @@ private-commits = "description(glob:'private:*')"
 colocate = true
 write-change-id-header = true
 
+
+[remotes.origin]
+# Auto-track my prefixed bookmarks in all circumstances
+auto-track-bookmarks = "glob:jeffs/*"
 
 # These options allow for `jj diff` and `jj show` to clear the output from the terminal after closing the pager.
 [[--scope]]
