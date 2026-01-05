@@ -16,6 +16,7 @@ watchexec = "latest"
 [settings]
 jobs = 8
 experimental = true
+lockfile = true
 # Docker makes a _far_ better portable postgres setup
 disable_tools = ["postgres"]
 
