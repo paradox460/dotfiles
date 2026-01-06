@@ -10,10 +10,10 @@ function __jj_new_branch
   jj bookmark create $main_argv $branchname
 end
 
-jira list --template list-separated --query "resolution = unresolved and assignee=currentuser() ORDER BY priority asc, created" | \
+jira issue list -a (jira me) -s~"Closed" --raw | \
+  jq -r '.[] | "\(.key)\t\(.fields.summary)"' | \
   fzf \
     --delimiter "\t" \
     --reverse \
-    --preview="jira view {1}" \
-    --bind="ctrl-e:execute(jira view -b {1})" | \
+    --preview="jira issue view {1}" | \
   __jj_new_branch
