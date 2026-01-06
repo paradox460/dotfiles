@@ -7,7 +7,16 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "context_servers": {
+    "mcp-server-github": {
+      "enabled": true,
+      "settings": {
+        "github_personal_access_token": {{ keyring "github" "zed-mcp" | quote }}
+      }
+    }
+  },
   "agent": {
+    "notify_when_agent_waiting": "all_screens",
     "always_allow_tool_actions": true,
     "enable_feedback": false,
     "default_model": {
@@ -63,7 +72,7 @@
     "allowed": false
   },
   "preview_tabs": {
-    "enable_preview_from_code_navigation": true,
+    "enable_keep_preview_on_code_navigation": true,
     "enable_preview_from_file_finder": true,
     "enabled": true
   },
