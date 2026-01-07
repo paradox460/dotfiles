@@ -30,7 +30,8 @@ else
 end
 
 for bookmark in $bookmarks
-  jj git push --allow-new -b $bookmark
+  jj bookmark track $bookmark@origin
+  jj git push -b $bookmark
   echo (set_color --bold cyan)"Opening PR for $bookmark"(set_color reset)
   jj log -r "trunk()..$bookmark"
   gh pr create $dry_run -H $bookmark $argv
