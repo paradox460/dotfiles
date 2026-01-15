@@ -1,19 +1,26 @@
 #!/usr/bin/env fish
 
-set main_argv $argv
+argparse -u 'j/jjopt=+' -- $argv
 
 function __jj_new_branch
-  read -d \t -a -l args
-  set -l ticket $args[1]
-  set -l name (string trim $args[2] | string lower | string replace -a ' ' "-" -- | string replace -a -r "[^\-0-9a-z]" "" --)
-  set -l branchname "jeffs/$ticket/$name"
-  jj bookmark create $main_argv $branchname
+    read -d \t -a -l args
+    if test (count $args) -eq 0
+        echo (set_color red)"No ticket specified" >&2
+        exit 1
+    end
+    set -l ticket $args[1]
+    set -l name (string trim $args[2] | string lower | string replace -a ' ' "-" -- | string replace -a -r "[^\-0-9a-z]" "" --)
+    set -l branchname "jeffs/$ticket/$name"
+    jj bookmark create {$_flag_jjopt} $branchname
 end
 
-jira issue list -a (jira me) -s~"Closed" --raw | \
-  jq -r '.[] | "\(.key)\t\(.fields.summary)"' | \
-  fzf \
-    --delimiter "\t" \
-    --reverse \
-    --preview="jira issue view {1}" | \
-  __jj_new_branch
+if set -q argv[1]
+    jira issue view $argv[1] --raw | jq -r '.key + "\t" + .fields.summary' | __jj_new_branch
+else
+    echo (set_color green)"Fetching issues"
+    set issues ( jira issue list -a (jira me) -s~"Closed" -s~"Done" --raw | jq -r '.[] | "\(.key)\t\(.fields.summary)"' ) ( jira issue list -s~"Closed" -s~"Done" --raw | jq -r '.[] | "\(.key)\t\(.fields.summary)"' )
+    string join -n -- \n $issues | fzf \
+        --delimiter "\t" \
+        --reverse \
+        --preview="jira issue view {1}" | __jj_new_branch
+end
