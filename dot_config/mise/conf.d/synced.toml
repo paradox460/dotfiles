@@ -3,6 +3,7 @@
 [tools]
 "cargo:cargo-generate" = "latest"
 "cargo:lucky_commit" = "latest"
+"cargo:jj-vine" = "latest"
 "cargo:sd" = "latest"
 "cargo:spurdify" = "latest"
 cargo-binstall = "latest"

@@ -28,6 +28,7 @@ p = ["git", "push"]
 rebase-all = ["rebase", "-s", "(::trunk())+ & mutable()", "--onto", "trunk()"]
 s = ["show"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+vine = ["util", "exec", "--", "jj-vine"]
 
 [revset-aliases]
 'local_trunk()' = '''
