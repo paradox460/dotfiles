@@ -10,6 +10,13 @@ alias ff_frames 'ffprobe -v error -select_streams v:0 -count_frames -show_entrie
 
 alias lg 'lazygit'
 
+{{ if lookPath "lsd" -}}
+# Use lsd instead of ls
+complete -c ls -e
+complete -c ls --wraps lsd
+alias ls lsd
+{{- end}}
+
 {{ $sed := eq .chezmoi.os "darwin" | ternary "gsed" "sed" -}}
 
 alias current-issue 'git rev-parse --abbrev-ref HEAD | {{ $sed }} -E "s/.*\/(.*?)\/.*/\1/"'
