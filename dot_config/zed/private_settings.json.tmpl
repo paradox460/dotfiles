@@ -7,6 +7,19 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "toolbar": {
+    "code_actions": true
+  },
+  "auto_signature_help": true,
+  "sticky_scroll": {
+    "enabled": true
+  },
+  "which_key": {
+    "enabled": true
+  },
+  "edit_predictions": {
+    "provider": "copilot"
+  },
   "context_servers": {
     "mcp-server-github": {
       "enabled": true,
@@ -16,6 +29,7 @@
     }
   },
   "agent": {
+    "use_modifier_to_send": true,
     "notify_when_agent_waiting": "all_screens",
     "always_allow_tool_actions": true,
     "enable_feedback": false,
@@ -33,9 +47,6 @@
   },
   "colorize_brackets": true,
   "confirm_quit": true,
-  "features": {
-    "edit_prediction_provider": "copilot"
-  },
   "format_on_save": "off",
   "helix_mode": false,
   "icon_theme": "Colored Zed Icons Theme Dark",
@@ -59,9 +70,11 @@
     "Fish": {
       "formatter": [
         "language_server",
-        {"external": {
-          "command": "fish_indent"
-        }}
+        {
+          "external": {
+            "command": "fish_indent"
+          }
+        }
       ]
     }
   },
