@@ -60,6 +60,10 @@ backend = "watchman"
 [fsmonitor.watchman]
 register-snapshot-trigger = true
 
+[merge-tools.zed]
+program = "zed"
+diff-args = ["--diff", "$left", "$right"]
+
 [merge-tools.ksdiff]
 diff-invocation-mode = "file-by-file"
 diff-args = ["--partial-changeset", "$left", "$right"]
