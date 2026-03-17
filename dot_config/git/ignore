@@ -55,3 +55,6 @@ mise.local.toml
 .mise.local.toml
 mise.*.local.toml
 .mise.*.local.toml
+
+# Claude local files
+**/.claude/*.local.json
