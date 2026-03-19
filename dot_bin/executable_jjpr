@@ -3,13 +3,6 @@ argparse -i "c/change=+" "r/ref=+" "N/dry-run" -- $argv
 
 trap "exit 2" SIGINT
 
-function pr_title_args --argument-names bookmark
-  string match -grq "jeffs/(?<ticket>\w+-\d+)/(?<description>.*)" -- $bookmark; or return
-  set description (string replace -a -- '-' ' ' $description)
-
-  printf '[%s] %s' $ticket $description
-end
-
 set -l push_args
 set -l bookmarks
 
@@ -41,10 +34,5 @@ for bookmark in $bookmarks
   jj git push -b $bookmark
   echo (set_color --bold cyan)"Opening PR for $bookmark"(set_color reset)
   jj log -r "trunk()..$bookmark"
-
-  set title (pr_title_args $bookmark)
-  test -n "$title"; and set -p title --title
-
-
-  gh pr create $dry_run -H $bookmark $title $argv
+  gh pr create $dry_run -H $bookmark $argv
 end
