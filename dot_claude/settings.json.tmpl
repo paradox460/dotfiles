@@ -1,5 +1,24 @@
 {
   "env": {
     "GITHUB_MCP_PAT": {{  keyring "github" "zed-mcp" | quote }}
-  }
+  },
+  "permissions": {
+    "allow": [
+      "Bash(jj log:*)",
+      "Bash(jj status*)",
+      "Bash(jj show*)",
+      "Bash(jj diff:*)",
+      "Bash(jj describe*)",
+      "Bash(jj commit*)",
+      "Bash(jj bookmark create*)",
+      "Bash(jj git fetch*)",
+      "Bash(jj rebase*)",
+      "Bash(jj squash*)",
+      "Bash(jj new*)"
+    ],
+    "defaultMode": "default",
+    "disableBypassPermissionsMode": "disable",
+    "disableAutoMode": "disable"
+  },
+  "model": "opus",
 }

@@ -1,6 +1,6 @@
 # Rules for projects using jujitsu-vcs
 
-Generally, all projects will use jujitsu-vcs. If a project directory has a `.jj` directory in its root, you should use jujitsu-vcs for all version control, _not_ git, unless jujitsu does not support a particular git feature.
+All projects use jujitsu-vcs. Always use jj for all version control operations — never use git commands, regardless of whether a `.jj` directory is present.
 
 Before modifying any files, either directly or through commands, you should run `jj new` to create a new change. After a change is finished, write a brief, one line description of this change using `jj describe`.
 
