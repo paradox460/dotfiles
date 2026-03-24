@@ -1,9 +1,9 @@
 function setup(config)
   config.action("tug", function()
     local cid = context.change_id()
-    jj_async("bookmark", "move", "--from", "closest_bookmark(" .. cid .. ")", "--to", "closest_pushable(" .. cid .. ")")
+    jj_async("bookmark", "advance")
     revisions.refresh()
-  end, { desc = "tug closest bookmark forwards", key = "t", scope = "revisions" }
+  end, { desc = "advance closest bookmark forwards", key = "t", scope = "revisions" }
   )
   config.action("ksdiff", function()
     jj("diff", "--tool", "ksdiff", "-r", context.change_id())
