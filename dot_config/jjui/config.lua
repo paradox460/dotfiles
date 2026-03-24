@@ -35,4 +35,20 @@ function setup(config)
     copy_to_clipboard(jj("show", "--color", "never", "-r", context.change_id()))
   end, { desc = "copy preview to clipboard", seq = { "ctrl+c", "a" }, scope = "revisions" }
   )
+
+  config.action("new jira bookmark", function()
+    local ticketId = input({ title = "JIRA Ticket ID" })
+    exec_shell("jjnb", ticketId)
+    revisions.refresh()
+  end, { desc = "new branch from jira ticket", seq = { "x", "j" }, scope = "revisions" })
+
+  config.action("new pr (bookmark)", function()
+    exec_shell("jjpr", "-r", context.change_id())
+    revisions.refresh()
+  end, { desc = "new pr from bookmark", seq = { "x", "p" }, scope = "revisions" })
+
+  config.action("new pr (change)", function()
+    exec_shell("jjpr", "-c", context.change_id())
+    revisions.refresh()
+  end, { desc = "new pr from bookmark", seq = { "x", "P" }, scope = "revisions" })
 end
