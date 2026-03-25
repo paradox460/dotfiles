@@ -1,3 +1,22 @@
+-- Keyboard bindings (revisions scope)
+--
+-- t           advance closest bookmark forwards
+-- ctrl+k      open revision in ksdiff
+--
+-- ctrl+c c    copy short change id
+-- ctrl+c C    copy long change id
+-- ctrl+c g    copy short commit id
+-- ctrl+c G    copy long commit id
+-- ctrl+c d    copy description
+-- ctrl+c a    copy preview
+--
+-- x j         new branch from jira ticket
+-- x p         new pr from bookmark
+-- x P         new pr from change
+-- x g         open pr in browser
+-- x b n       new change on bookmark
+-- x b r       rebase change onto bookmark
+
 local function jj_log_template(template)
   return jj("log", "--no-graph", "-r", context.change_id(), "-T", template, "--color", "never")
 end
