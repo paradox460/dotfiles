@@ -1,3 +1,7 @@
+local function jj_log_template(template)
+  return jj("log", "--no-graph", "-r", context.change_id(), "-T", template, "--color", "never")
+end
+
 local function choose_bookmark(title)
   local out, err = jj("bookmark", "list", "-T", "name ++ \"\\n\"", "--color", "never")
   if not out or out == "" then
@@ -26,23 +30,23 @@ function setup(config)
 
   -- Clipboard actions
   config.action("copy short change id", function()
-    copy_to_clipboard(jj("log", "--no-graph", "-r", context.change_id(), "-T", "change_id.short(8)", "--color", "never"))
+    copy_to_clipboard(jj_log_template("change_id.short(8)"))
   end, { desc = "copy short change id to clipboard", seq = { "ctrl+c", "c" }, scope = "revisions" }
   )
   config.action("copy long change id", function()
-    copy_to_clipboard(jj("log", "--no-graph", "-r", context.change_id(), "-T", "change_id", "--color", "never"))
+    copy_to_clipboard(jj_log_template("change_id"))
   end, { desc = "copy long change id to clipboard", seq = { "ctrl+c", "C" }, scope = "revisions" }
   )
   config.action("copy short commit id", function()
-    copy_to_clipboard(jj("log", "--no-graph", "-r", context.change_id(), "-T", "commit_id.short(8)", "--color", "never"))
+    copy_to_clipboard(jj_log_template("commit_id.short(8)"))
   end, { desc = "copy short commit id to clipboard", seq = { "ctrl+c", "g" }, scope = "revisions" }
   )
   config.action("copy long commit id", function()
-    copy_to_clipboard(jj("log", "--no-graph", "-r", context.change_id(), "-T", "commit_id", "--color", "never"))
+    copy_to_clipboard(jj_log_template("commit_id"))
   end, { desc = "copy long commit id to clipboard", seq = { "ctrl+c", "G" }, scope = "revisions" }
   )
   config.action("copy description", function()
-    copy_to_clipboard(jj("log", "--no-graph", "-r", context.change_id(), "-T", "description", "--color", "never"))
+    copy_to_clipboard(jj_log_template("description"))
   end, { desc = "copy description to clipboard", seq = { "ctrl+c", "d" }, scope = "revisions" }
   )
   config.action("copy all", function()
