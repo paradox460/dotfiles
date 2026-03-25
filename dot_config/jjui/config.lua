@@ -51,4 +51,22 @@ function setup(config)
     exec_shell("jjpr", "-c", context.change_id())
     revisions.refresh()
   end, { desc = "new pr from bookmark", seq = { "x", "P" }, scope = "revisions" })
+
+  config.action("new on bookmark", function()
+    local out, err = jj("bookmark", "list", "-T", "name ++ \"\\n\"", "--color", "never")
+    if not out or out == "" then
+      flash("No bookmarks found")
+      return
+    end
+    local bookmarks = split_lines(out)
+    if #bookmarks == 0 then
+      flash("No bookmarks found")
+      return
+    end
+    local selected = choose({options = bookmarks, title = "New change on bookmark" })
+    if selected then
+      jj("new", selected)
+      revisions.refresh()
+    end
+  end, { desc = "new change on bookmark", seq = { "x", "b" }, scope = "revisions" })
 end
