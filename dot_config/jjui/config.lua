@@ -119,4 +119,10 @@ function setup(config)
       exec_shell("gh pr view --web " .. bookmark)
     end
   end, { desc = "open pr in browser", seq = { "x", "g" }, scope = "revisions" })
+
+  -- Rebinds
+  config.bind({ key = "s", action = "revisions.open_squash", scope = "revisions", desc = "squash" })
+  config.bind({ key = "shift+s", action = "revisions.split", scope = "revisions", desc = "split" })
+  config.bind({ key = "s", action = "revisions.details.squash", scope = "revisions.details", desc = "squash" })
+  config.bind({ key = "shift+s", action = "revisions.details.split", scope = "revisions.details", desc = "split" })
 end
