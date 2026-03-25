@@ -81,4 +81,20 @@ function setup(config)
       revisions.refresh()
     end
   end, { desc = "rebase change onto bookmark", seq = { "x", "b", "r" }, scope = "revisions" })
+
+  config.action("open pr in browser", function()
+    local out, err = jj("bookmark", "list", "-r", context.change_id(), "-T", "name ++ \"\\n\"", "--color", "never")
+    if not out or out == "" then
+      flash("No bookmark on this change")
+      return
+    end
+    local bookmarks = split_lines(out)
+    local bookmark = bookmarks[1]
+    if #bookmarks > 1 then
+      bookmark = choose({options = bookmarks, title = "Open PR for bookmark" })
+    end
+    if bookmark then
+      exec_shell("gh pr view --web " .. bookmark)
+    end
+  end, { desc = "open pr in browser", seq = { "x", "g" }, scope = "revisions" })
 end
