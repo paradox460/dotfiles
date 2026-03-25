@@ -18,7 +18,7 @@ end
 
 function setup(config)
   config.action("tug", function()
-    jj_async("bookmark", "advance")
+    jj_async("bookmark", "advance", "--to", context.change_id())
     revisions.refresh()
   end, { desc = "advance closest bookmark forwards", key = "t", scope = "revisions" }
   )
