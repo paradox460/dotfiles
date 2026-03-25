@@ -18,7 +18,6 @@ end
 
 function setup(config)
   config.action("tug", function()
-    local cid = context.change_id()
     jj_async("bookmark", "advance")
     revisions.refresh()
   end, { desc = "advance closest bookmark forwards", key = "t", scope = "revisions" }
@@ -68,7 +67,7 @@ function setup(config)
   config.action("new pr (change)", function()
     exec_shell("jjpr -c " .. context.change_id())
     revisions.refresh()
-  end, { desc = "new pr from bookmark", seq = { "x", "P" }, scope = "revisions" })
+  end, { desc = "new pr from change", seq = { "x", "P" }, scope = "revisions" })
 
   config.action("new on bookmark", function()
     local selected = choose_bookmark("New change on bookmark")
