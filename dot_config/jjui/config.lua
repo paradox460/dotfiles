@@ -1,3 +1,17 @@
+local function choose_bookmark(title)
+  local out, err = jj("bookmark", "list", "-T", "name ++ \"\\n\"", "--color", "never")
+  if not out or out == "" then
+    flash("No bookmarks found")
+    return nil
+  end
+  local bookmarks = split_lines(out)
+  if #bookmarks == 0 then
+    flash("No bookmarks found")
+    return nil
+  end
+  return choose({ options = bookmarks, title = title })
+end
+
 function setup(config)
   config.action("tug", function()
     local cid = context.change_id()
@@ -53,20 +67,18 @@ function setup(config)
   end, { desc = "new pr from bookmark", seq = { "x", "P" }, scope = "revisions" })
 
   config.action("new on bookmark", function()
-    local out, err = jj("bookmark", "list", "-T", "name ++ \"\\n\"", "--color", "never")
-    if not out or out == "" then
-      flash("No bookmarks found")
-      return
-    end
-    local bookmarks = split_lines(out)
-    if #bookmarks == 0 then
-      flash("No bookmarks found")
-      return
-    end
-    local selected = choose({options = bookmarks, title = "New change on bookmark" })
+    local selected = choose_bookmark("New change on bookmark")
     if selected then
       jj("new", selected)
       revisions.refresh()
     end
-  end, { desc = "new change on bookmark", seq = { "x", "b" }, scope = "revisions" })
+  end, { desc = "new change on bookmark", seq = { "x", "b", "n" }, scope = "revisions" })
+
+  config.action("rebase onto bookmark", function()
+    local selected = choose_bookmark("Rebase onto bookmark")
+    if selected then
+      jj("rebase", "-b", context.change_id(), "-d", selected)
+      revisions.refresh()
+    end
+  end, { desc = "rebase change onto bookmark", seq = { "x", "b", "r" }, scope = "revisions" })
 end
