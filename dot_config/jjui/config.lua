@@ -73,8 +73,12 @@ function setup(config)
   )
 
   config.action("new jira bookmark", function()
-    local ticketId = input({ title = "JIRA Ticket ID" })
-    exec_shell("jjnb " .. ticketId)
+    local desc = jj_log_template("description")
+    local ticket = desc and desc:match("%w+-%d+")
+    if not ticket then
+      ticket = input({ title = "JIRA Ticket ID" })
+    end
+    exec_shell("jjnb " .. ticket)
     revisions.refresh()
   end, { desc = "new branch from jira ticket", seq = { "x", "j" }, scope = "revisions" })
 

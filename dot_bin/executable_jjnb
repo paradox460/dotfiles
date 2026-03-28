@@ -2,25 +2,34 @@
 
 argparse -u 'j/jjopt=+' -- $argv
 
-function __jj_new_branch
-    read -d \t -a -l args
-    if test (count $args) -eq 0
+function __jj_new_branch -a ticket name
+    if test -z "$ticket"
         echo (set_color red)"No ticket specified" >&2
         exit 1
     end
-    set -l ticket $args[1]
-    set -l name (string trim $args[2] | string lower | string replace -a ' ' "-" -- | string replace -a -r "[^\-0-9a-z]" "" --)
-    set -l branchname "jeffs/$ticket/$name"
+    set -l slug (string trim "$name" | string lower | string replace -a ' ' "-" -- | string replace -a -r "[^\-0-9a-z]" "" --)
+    set -l branchname "jeffs/$ticket/$slug"
     jj bookmark create {$_flag_jjopt} $branchname
 end
 
-if set -q argv[1]
-    jira issue view $argv[1] --raw | jq -r '.key + "\t" + .fields.summary' | __jj_new_branch
+# Try to extract JIRA ticket(s) from the current change's description
+set -l desc (jj log --no-pager -r @ -T description --no-graph)
+set -l tickets (string match -r -a '\w+-\d+' -- $desc)
+
+if test (count $tickets) -gt 0
+    # Use the first ticket found, derive name from the rest of the description
+    set -l ticket $tickets[1]
+    set -l name (string replace -r '\w+-\d+\s*' '' -- $desc | string trim)
+    __jj_new_branch $ticket $name
+else if set -q argv[1]
+    jira issue view $argv[1] --raw | jq -r '.key + "\t" + .fields.summary' | read -d \t -l ticket name
+    __jj_new_branch $ticket $name
 else
     echo (set_color green)"Fetching issues"
     set issues ( jira issue list -a (jira me) -s~"Closed" -s~"Done" --raw | jq -r '.[] | "\(.key)\t\(.fields.summary)"' ) ( jira issue list -s~"Closed" -s~"Done" --raw | jq -r '.[] | "\(.key)\t\(.fields.summary)"' )
     string join -n -- \n $issues | fzf \
         --delimiter "\t" \
         --reverse \
-        --preview="jira issue view {1}" | __jj_new_branch
+        --preview="jira issue view {1}" | read -d \t -l ticket name
+    __jj_new_branch $ticket $name
 end
