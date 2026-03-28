@@ -14,6 +14,7 @@
 -- x p         new pr from bookmark
 -- x P         new pr from change
 -- x g         open pr in browser
+-- x s         sign checked or current change(s)
 -- x b n       new change on bookmark
 -- x b r       rebase change onto bookmark
 
@@ -91,6 +92,22 @@ function setup(config)
     exec_shell("jjpr -c " .. context.change_id())
     revisions.refresh()
   end, { desc = "new pr from change", seq = { "x", "P" }, scope = "revisions" })
+
+  config.action("sign", function()
+    local checked = context.checked_change_ids()
+    local args = { "sign" }
+    if #checked > 0 then
+      for _, change_id in ipairs(checked) do
+        args[#args + 1] = "-r"
+        args[#args + 1] = change_id
+      end
+    else
+      args[#args + 1] = "-r"
+      args[#args + 1] = context.change_id()
+    end
+    jj(args)
+    revisions.refresh()
+  end, { desc = "sign checked or current change(s)", seq = { "x", "s" }, scope = "revisions" })
 
   config.action("new on bookmark", function()
     local selected = choose_bookmark("New change on bookmark")
