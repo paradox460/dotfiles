@@ -1,0 +1,176 @@
+:root {
+  --base00: #1d1f21;
+  --base01: #282a2e;
+  --base02: #373b41;
+  --base03: #969896;
+  --base04: #b4b7b4;
+  --base05: #c5c8c6;
+  --base06: #e0e0e0;
+  --base07: #fff;
+  --base08: #c66;
+  --base09: #de935f;
+  --base0A: #f0c674;
+  --base0B: #b5bd68;
+  --base0C: #8abeb7;
+  --base0D: #81a2be;
+  --base0E: #b294bb;
+  --base0F: #a3685a;
+
+  /* Semantic aliases */
+  --gets-text: var(--base02);
+  --link-color: var(--base05);
+  --link-hover: var(--base0D);
+  --you-color: var(--base0B);
+  --reply-color: var(--base0D);
+  --alt-row-bg: #333740;
+  --hidden-image-bg: oklch(from var(--base08) l c h / 0.8);
+  --you-bg: oklch(from var(--you-color) l c h / 0.2);
+  --reply-bg: oklch(from var(--reply-color) l c h / 0.2);
+  --highlight-bg: oklch(from var(--base0E) l c h / 0.2);
+  --pass-bg: oklch(from var(--you-color) l c h / 0.75);
+}
+
+/* Repeating digit highlights */
+
+:is(.dubs, .trips, .quads, .quints) .post .postInfo .postNum.desktop > a {
+  color: var(--gets-text) !important;
+
+  &:first-of-type {
+    padding-left: 2px;
+    border-start-start-radius: 3px;
+    border-end-start-radius: 3px;
+  }
+
+  &:last-of-type {
+    padding-right: 2px;
+    border-start-end-radius: 3px;
+    border-end-end-radius: 3px;
+  }
+
+  .dubs & { background: var(--base0D); }
+  .trips & { background: var(--base0C); }
+  .quads & { background: var(--base0B); }
+  .quints & { background: var(--base0A); }
+}
+
+/* Always-visible country flags */
+
+.flag {
+  line-height: 11px;
+  top: 0;
+  width: auto !important;
+
+  &::after {
+    margin-left: 16px;
+    padding-right: 3px;
+    content: " " attr(title);
+    white-space: nowrap;
+    border-radius: 3px;
+    background: var(--base02);
+  }
+}
+
+/* 4chan pass flair */
+
+.post .n-pu {
+  width: auto !important;
+  color: var(--base01);
+  border-radius: 3px;
+  background-color: var(--pass-bg) !important;
+  background-repeat: no-repeat !important;
+  background-position: bottom left !important;
+
+  &::after {
+    margin-left: 19px;
+    padding-right: 3px;
+    content: attr(title);
+  }
+}
+
+/* Reply highlighting */
+
+.reply {
+  &:target,
+  &.highlight {
+    background: var(--highlight-bg) !important;
+  }
+}
+
+/* Thread layout */
+
+.board .thread {
+  & .replyContainer:nth-of-type(even):not(.hidden) .post {
+    background-color: var(--alt-row-bg) !important;
+  }
+
+  & .quotesYou {
+    &.opContainer .post.op,
+    &.replyContainer .post.reply {
+      border-left-color: var(--reply-color) !important;
+      background: var(--reply-bg) !important;
+    }
+  }
+
+  & .yourPost {
+    &.opContainer .post.op,
+    &.replyContainer .post.reply {
+      border-left-color: var(--you-color) !important;
+      background: var(--you-bg) !important;
+    }
+  }
+
+  & .expanded-image .fileThumb {
+    float: none;
+  }
+}
+
+.postMessage {
+  max-width: 50em;
+}
+
+/* Image hiding */
+
+.noimage {
+  & .fileThumb {
+    display: none;
+  }
+
+  & .fileText::before {
+    content: "hidden-image";
+    background: var(--hidden-image-bg);
+    color: var(--base02);
+    padding: 0 2px;
+    border-radius: 3px;
+    margin: -1px;
+    margin-right: 0.5ex;
+    border: 1px solid color-mix(in srgb, var(--hidden-image-bg) 60%, var(--base00));
+  }
+}
+
+/* StyleChan CSP fixes */
+
+span.postNum.desktop > a {
+  color: var(--link-color) !important;
+
+  &:hover {
+    color: var(--link-hover) !important;
+  }
+}
+
+#navlinks {
+  display: none;
+}
+
+.prettyprint {
+  white-space: pre-wrap;
+}
+
+/* Scrollbar markers */
+
+.you-scroll-marker {
+  background-color: var(--you-color);
+}
+
+.reply-scroll-marker {
+  background-color: var(--reply-color);
+}
