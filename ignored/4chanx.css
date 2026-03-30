@@ -28,6 +28,9 @@
   --reply-bg: oklch(from var(--reply-color) l c h / 0.2);
   --highlight-bg: oklch(from var(--base0E) l c h / 0.2);
   --pass-bg: oklch(from var(--you-color) l c h / 0.75);
+
+  /* XT vars */
+  --xt-unread-line: var(--base08);
 }
 
 /* Repeating digit highlights */
