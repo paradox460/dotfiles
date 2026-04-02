@@ -1,0 +1,5 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[fix.tools.mix-format]
+command = ["mix", "format", "--stdin-filename", "$path", "-"]
+patterns = ["glob:'**/*.ex'", "glob:'**/*.exs'"]
