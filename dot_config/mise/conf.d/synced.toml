@@ -12,6 +12,7 @@ rust = "stable"
 slsa-verifier = "latest"
 usage = "latest"
 watchexec = "latest"
+"cargo:diffedit3" = "latest"
 
 
 [settings]
