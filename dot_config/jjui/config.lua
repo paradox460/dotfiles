@@ -15,6 +15,7 @@
 -- x p         new pr from bookmark
 -- x P         new pr from change
 -- x g         open pr in browser
+-- x f         fix checked or current change(s)
 -- x s         sign checked or current change(s)
 -- x b n       new change on bookmark
 -- x b r       rebase change onto bookmark
@@ -119,6 +120,22 @@ function setup(config)
     revisions.refresh()
   end, { desc = "new pr from change", seq = { "x", "P" }, scope = "revisions" })
 
+  config.action("fix", function()
+    local checked = context.checked_change_ids()
+    local args = { "fix" }
+    if #checked > 0 then
+      for _, change_id in ipairs(checked) do
+        args[#args + 1] = "--source"
+        args[#args + 1] = change_id
+      end
+    else
+      args[#args + 1] = "--source"
+      args[#args + 1] = context.change_id()
+    end
+    jj(args)
+    revisions.refresh()
+  end, { desc = "fix checked or current change(s)", seq = { "x", "f" }, scope = "revisions" })
+
   config.action("sign", function()
     local checked = context.checked_change_ids()
     local args = { "sign" }
@@ -160,7 +177,7 @@ function setup(config)
     local bookmarks = split_lines(out)
     local bookmark = bookmarks[1]
     if #bookmarks > 1 then
-      bookmark = choose({options = bookmarks, title = "Open PR for bookmark" })
+      bookmark = choose({ options = bookmarks, title = "Open PR for bookmark" })
     end
     if bookmark then
       exec_shell("gh pr view --web " .. bookmark)
