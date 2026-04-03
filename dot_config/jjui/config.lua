@@ -8,6 +8,7 @@
 -- ctrl+c g    copy short commit id
 -- ctrl+c G    copy long commit id
 -- ctrl+c d    copy description
+-- ctrl+c b    copy bookmark name
 -- ctrl+c a    copy preview
 --
 -- x j         new branch from jira ticket
@@ -67,6 +68,31 @@ function setup(config)
   config.action("copy description", function()
     copy_to_clipboard(jj_log_template("description"))
   end, { desc = "copy description to clipboard", seq = { "ctrl+c", "d" }, scope = "revisions" }
+  )
+  config.action("copy bookmark", function()
+    local out, err = jj("bookmark", "list", "-r", context.change_id(), "-T", "name ++ \"\\n\"", "--color", "never")
+    if not out or out == "" then
+      flash("No bookmark on this change")
+      return
+    end
+    local bookmarks = split_lines(out)
+    if #bookmarks == 1 then
+      copy_to_clipboard(bookmarks[1])
+    else
+      local options = { "All (" .. table.concat(bookmarks, " ") .. ")" }
+      for _, b in ipairs(bookmarks) do
+        options[#options + 1] = b
+      end
+      local selected = choose({ options = options, title = "Copy bookmark name" })
+      if selected then
+        if selected == options[1] then
+          copy_to_clipboard(table.concat(bookmarks, " "))
+        else
+          copy_to_clipboard(selected)
+        end
+      end
+    end
+  end, { desc = "copy bookmark name to clipboard", seq = { "ctrl+c", "b" }, scope = "revisions" }
   )
   config.action("copy all", function()
     copy_to_clipboard(jj("show", "--color", "never", "-r", context.change_id()))
