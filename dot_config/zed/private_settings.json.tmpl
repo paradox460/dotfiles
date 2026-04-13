@@ -72,10 +72,31 @@
   "languages": {
     "Elixir": {
       "language_servers": [
-        "expert",
+        "!expert",
         "!elixir-ls",
         "!next-ls",
         "!lexical",
+        "dexter",
+        "..."
+      ]
+    },
+    "EEx": {
+      "language_servers": [
+        "!expert",
+        "!elixir-ls",
+        "!next-ls",
+        "!lexical",
+        "dexter",
+        "..."
+      ]
+    },
+    "HEEx": {
+      "language_servers": [
+        "!expert",
+        "!elixir-ls",
+        "!next-ls",
+        "!lexical",
+        "dexter",
         "..."
       ]
     },
@@ -95,6 +116,12 @@
       "settings": {
         "exportPdf": "onSave",
         "outputPath": "$root/$name"
+      }
+    },
+    "dexter": {
+      "binary": {
+        "path": "/Users/jeffrey.sandberg/.local/share/mise/shims/dexter",
+        "arguments": ["lsp"]
       }
     }
   },

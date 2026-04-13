@@ -37,6 +37,7 @@ Temporary Items
 .elixir-tools
 .expert
 .lexical
+.dexter.db*
 
 # VsCode
 .vscode/
