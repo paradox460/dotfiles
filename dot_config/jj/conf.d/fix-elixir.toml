@@ -1,5 +1,5 @@
 "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
 
 [fix.tools.mix-format]
-command = ["mix", "format", "--stdin-filename", "$path", "-"]
+command = ["sh", "-c", "ext=${1##*.}; d=$(mktemp -d \"${TMPDIR:-/tmp}/jj-fix-XXXXXX\"); f=\"$d/fix.$ext\"; cat >\"$f\" && mix format \"$f\" >/dev/null 2>&1; cat \"$f\"; rm -rf \"$d\"", "sh", "$path"]
 patterns = ["glob:'**/*.ex'", "glob:'**/*.exs'"]
