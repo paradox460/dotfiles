@@ -19,9 +19,13 @@
 -- x s         sign checked or current change(s)
 -- x b n       new change on bookmark
 -- x b r       rebase change onto bookmark
+--
+-- Evolog/Oplog:
+-- alt+j        inject entry before @ (splits change at that point)
 
 local utils = require("utils")
 local clipboard = require("clipboard")
+local inject = require("inject")
 local jj_log_template = utils.jj_log_template
 local choose_bookmark = utils.choose_bookmark
 
@@ -37,6 +41,7 @@ function setup(config)
   )
 
   clipboard.register(config)
+  inject.register(config)
 
   config.action("new jira bookmark", function()
     local desc = jj_log_template("description")
