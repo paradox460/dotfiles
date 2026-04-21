@@ -19,7 +19,6 @@ tool = "delta"
 
 [aliases]
 a = ["abandon"]
-bu = ["bookmark", "move", "--from", "closest_main(@-)", "--to", "@-"]
 d = ["describe"]
 e = ["edit"]
 g = ['git']
@@ -27,7 +26,14 @@ n = ["new"]
 p = ["git", "push"]
 rebase-all = ["rebase", "-s", "(::trunk())+ & mutable()", "--onto", "trunk()"]
 s = ["show"]
-vine = ["util", "exec", "--", "jj-vine"]
+# `jj stack <revset>` to include specific revs
+stack = ["rebase", "--after", "trunk()", "--before", "closest_merge(@)", "--revisions"]
+
+# `jj stage` to include the whole stack after the megamerge
+stage = ["stack", "closest_merge(@)+:: ~ empty()"]
+
+# `jj restack` to rebase your changes onto `trunk()`
+restack = ["rebase", "--onto", "trunk()", "--source", "roots(trunk()..) & mutable()", "--simplify-parents"]
 
 [revset-aliases]
 'local_trunk()' = '''
@@ -39,8 +45,8 @@ latest(
 )
 '''
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
-'closest_main(to)' = "heads(::to & (bookmarks(exact:'main')|bookmarks(exact:'master')))"
 'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
+"closest_merge(to)" = "heads(::to & merges())"
 
 [templates]
 git_push_bookmark = '"jeffs/push/" ++ change_id.short()'
@@ -69,7 +75,7 @@ diff-args = ["--partial-changeset", "$left", "$right"]
 merge-args = ["--merge", "--output", "$output", "--base", "$base", "$left", "$right"]
 
 [git]
-private-commits = "description(glob:'private:*')"
+private-commits = "description(glob:'private:*') | bookmarks(glob:'private/*') | bookmarks(exact:'megamerge')"
 colocate = true
 write-change-id-header = true
 
