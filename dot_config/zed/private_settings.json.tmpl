@@ -12,7 +12,7 @@
     "claude-acp": {
       "type": "registry",
       "default_config_options": {
-          "mode": "acceptEdits"
+          "mode": "auto"
       },
     }
   },
@@ -38,7 +38,7 @@
     }
   },
   "agent": {
-    "play_sound_when_agent_done": true,
+    "play_sound_when_agent_done": "always",
     "tool_permissions": {
       "default": "allow"
     },
@@ -118,12 +118,6 @@
         "outputPath": "$root/$name"
       }
     },
-    "dexter": {
-      "binary": {
-        "path": "/Users/jeffrey.sandberg/.local/share/mise/shims/dexter",
-        "arguments": ["lsp"]
-      }
-    }
   },
   "minimap": {
     "show": "auto"
