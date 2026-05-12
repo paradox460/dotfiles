@@ -1,0 +1,24 @@
+[template-aliases]
+builtin_log_node = '''
+coalesce(
+  if(!self, label("elided", "~")),
+  label(
+    separate(" ",
+      if(current_working_copy, "working_copy"),
+      if(immutable, "immutable", "mutable"),
+      if(self.contained_in("description(glob:'private:*') | bookmarks(glob:'private/*') | bookmarks(exact:'megamerge')"), "private"),
+      if(conflict, "conflicted"),
+    ),
+    coalesce(
+      if(current_working_copy, "@"),
+      if(immutable, "◆"),
+      if(conflict, "×"),
+      if(self.contained_in("description(glob:'private:*') | bookmarks(glob:'private/*') | bookmarks(exact:'megamerge')"), "◍"),
+      "○",
+    )
+  )
+)
+'''
+
+[colors]
+private = "yellow"
