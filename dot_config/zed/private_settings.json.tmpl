@@ -7,25 +7,47 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "git_panel": {
-    "dock": "left"
+  "show_edit_predictions": false,
+  "language_models": {
+    "openai_compatible": {
+      "Local llama-swap": {
+        "api_url": "http://localhost:8080/v1",
+        "available_models": [
+          {
+            "name": "qwen",
+            "max_tokens": 200000,
+            "max_output_tokens": 32000,
+            "max_completion_tokens": 200000,
+            "capabilities": {
+              "tools": true,
+              "images": true,
+              "parallel_tool_calls": true,
+              "prompt_cache_key": false,
+              "chat_completions": true,
+              "interleaved_reasoning": false
+            }
+          }
+        ]
+      }
+    }
   },
-  "collaboration_panel": {
-    "dock": "left"
-  },
+  "cli_default_open_behavior": "new_window",
   "project_panel": {
     "dock": "left"
   },
   "outline_panel": {
     "dock": "left"
   },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
   "diff_view_style": "split",
   "agent_servers": {
-    "claude-acp": {
-      "type": "registry",
-      "default_config_options": {
-          "mode": "auto"
-      },
+    "github-copilot-cli": {
+      "type": "registry"
     }
   },
   "toolbar": {
@@ -39,19 +61,25 @@
     "enabled": true
   },
   "edit_predictions": {
+    "open_ai_compatible_api": {
+      "prompt_format": "zeta2_1",
+      "model": "zeta",
+      "api_url": "http://localhost:8080/v1/completions"
+    },
     "provider": "copilot"
   },
   "context_servers": {
     "mcp-server-github": {
-      "enabled": {{ not .workMachine }},
+      "enabled": false,
       "settings": {
         "github_personal_access_token": {{ keyring "github" "zed-mcp" | quote }}
       }
     }
   },
   "agent": {
-    "dock": "right",
     "sidebar_side": "right",
+    "default_profile": "write",
+    "dock": "right",
     "play_sound_when_agent_done": "always",
     "tool_permissions": {
       "default": "allow"
@@ -60,8 +88,9 @@
     "notify_when_agent_waiting": "all_screens",
     "enable_feedback": false,
     "default_model": {
-      "model": "claude-opus-4.6",
-      "provider": "copilot_chat"
+      "enable_thinking": false,
+      "model": "openrouter/auto",
+      "provider": "openrouter"
     },
     "model_parameters": []
   },
