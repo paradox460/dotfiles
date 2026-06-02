@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "semantic_tokens": "combined",
   "show_edit_predictions": false,
   "language_models": {
     "openai_compatible": {
@@ -22,9 +23,9 @@
               "tools": true,
               "images": true,
               "parallel_tool_calls": true,
-              "prompt_cache_key": false,
+              "prompt_cache_key": true,
               "chat_completions": true,
-              "interleaved_reasoning": false
+              "interleaved_reasoning": true
             }
           }
         ]
@@ -88,9 +89,9 @@
     "notify_when_agent_waiting": "all_screens",
     "enable_feedback": false,
     "default_model": {
-      "enable_thinking": false,
-      "model": "openrouter/auto",
-      "provider": "openrouter"
+      "enable_thinking": true,
+      "model": "qwen",
+      "provider": "Local llama-swap"
     },
     "model_parameters": []
   },
