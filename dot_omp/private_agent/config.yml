@@ -1,0 +1,36 @@
+lastChangelogVersion: 15.7.5
+symbolPreset: nerd
+theme:
+  dark: titanium
+  light: light
+setupVersion: 1
+statusLine:
+  preset: custom
+  leftSegments:
+    - model
+    - mode
+    - path
+    - pr
+    - session
+    - subagents
+  rightSegments:
+    - session_name
+    - token_in
+    - token_out
+    - cache_read
+    - cache_write
+    - token_rate
+    - cost
+    - context_pct
+    - context_total
+    - time_spent
+    - time
+display:
+  showTokenUsage: true
+task:
+  showResolvedModelBadge: true
+modelRoles:
+  default: llama-swap/qwen3.5
+defaultThinkingLevel: auto
+secrets:
+  enabled: true
