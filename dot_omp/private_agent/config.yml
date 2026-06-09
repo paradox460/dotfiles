@@ -1,19 +1,19 @@
-lastChangelogVersion: 15.7.5
+lastChangelogVersion: 15.10.7
 symbolPreset: nerd
-theme:
+theme: 
   dark: titanium
   light: light
 setupVersion: 1
-statusLine:
+statusLine: 
   preset: custom
-  leftSegments:
+  leftSegments: 
     - model
     - mode
     - path
     - pr
     - session
     - subagents
-  rightSegments:
+  rightSegments: 
     - session_name
     - token_in
     - token_out
@@ -25,12 +25,20 @@ statusLine:
     - context_total
     - time_spent
     - time
-display:
+display: 
   showTokenUsage: true
-task:
+task: 
   showResolvedModelBadge: true
-modelRoles:
-  default: llama-swap/qwen3.5
+modelRoles: 
+  default: openrouter/openai/gpt-oss-120b:free
 defaultThinkingLevel: auto
-secrets:
+secrets: 
   enabled: true
+github: 
+  enabled: true
+showHardwareCursor: false
+tools: 
+  discoveryMode: mcp-only
+mcp: 
+  discoveryMode: false
+hideThinkingBlock: false

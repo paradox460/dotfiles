@@ -1,10 +1,7 @@
 providers:
-   llama-swap:
-     baseUrl: http://localhost:8080/v1
-     api: openai-completions
-     auth: none
-     models:
-        - id: qwen3.5
-          name: Qwen 3.5
-          reasoning: true
-          input: [text, image]
+  llama.cpp:
+    baseUrl: http://127.0.0.1:8080/v1
+    api: openai-responses
+    auth: none
+    discovery:
+      type: llama.cpp
