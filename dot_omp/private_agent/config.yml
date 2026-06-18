@@ -1,4 +1,3 @@
-lastChangelogVersion: 15.10.7
 symbolPreset: nerd
 theme: 
   dark: titanium
@@ -30,7 +29,7 @@ display:
 task: 
   showResolvedModelBadge: true
 modelRoles: 
-  default: openrouter/openai/gpt-oss-120b:free
+  default: openrouter/xiaomi/mimo-v2.5-pro
 defaultThinkingLevel: auto
 secrets: 
   enabled: true
@@ -40,5 +39,10 @@ showHardwareCursor: false
 tools: 
   discoveryMode: mcp-only
 mcp: 
-  discoveryMode: false
+  discoveryMode: true
 hideThinkingBlock: false
+browser: 
+  headless: false
+steeringMode: one-at-a-time
+followUpMode: one-at-a-time
+interruptMode: immediate
