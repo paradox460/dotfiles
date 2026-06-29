@@ -73,7 +73,7 @@
     "mcp-server-github": {
       "enabled": false,
       "settings": {
-        "github_personal_access_token": {{ keyring "github" "zed-mcp" | quote }}
+        "github_personal_access_token": {{ keyring "github" "mcp" | default "" | quote }}
       }
     }
   },

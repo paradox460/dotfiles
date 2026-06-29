@@ -32,5 +32,22 @@
   "show_command": false,
   "allow_concurrent_runs": false,
   "use_new_terminal": true
+},
+{
+  "label": "Open in VIM",
+  "command": "nvim \"+:normal ${ZED_ROW}G${ZED_COLUMN}|\" $ZED_FILE",
+  "shell": {
+    "program": "sh"
+  },
+  "env": {
+    "EDITOR": "zed -w",
+    "VISUAL": "zed -w"
+  },
+  "hide": "on_success",
+  "reveal_target": "center",
+  "show_summary": false,
+  "show_command": false,
+  "allow_concurrent_runs": false,
+  "use_new_terminal": true
 }
 ]

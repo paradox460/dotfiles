@@ -81,15 +81,12 @@
         {
           "task_name": "LazyGit"
         }
-      ]
-    }
-  },
-  // Launch claude
-  {
-    "bindings": {
-      "cmd-alt-c": [
-        "agent::NewExternalAgentThread",
-        { "agent": { "custom": { "name": "claude-acp" } } }
+      ],
+      "space v": [
+        "task::Spawn",
+        {
+          "task_name": "Open in VIM"
+        }
       ]
     }
   }
