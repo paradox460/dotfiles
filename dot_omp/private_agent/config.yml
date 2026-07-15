@@ -26,8 +26,12 @@ statusLine:
     - time
 display: 
   showTokenUsage: true
+  cacheMissMarker: true
 task: 
   showResolvedModelBadge: true
+  eager: preferred
+  isolation: 
+    mode: auto
 modelRoles: 
   default: openrouter/xiaomi/mimo-v2.5-pro
 defaultThinkingLevel: auto
@@ -42,9 +46,22 @@ mcp:
   discoveryMode: true
 hideThinkingBlock: false
 browser: 
-  headless: false
+  headless: true
 steeringMode: one-at-a-time
 followUpMode: one-at-a-time
 interruptMode: immediate
 compaction: 
   strategy: snapcompact
+plan: 
+  defaultOnStartup: true
+features: 
+  unexpectedStopDetection: true
+terminal: 
+  showProgress: true
+power: 
+  sleepPrevention: system
+memory: 
+  backend: mnemopi
+mnemopi: 
+  scoping: per-project-tagged
+readLineNumbers: true
