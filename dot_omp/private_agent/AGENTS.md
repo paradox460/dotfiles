@@ -1,0 +1,1 @@
+Most of my repositories use Jujitsu VCS (JJ) in place of git. Avoid using git for history and diff lookups. Keep in mind that each user prompt will trigger a new JJ change to be created, but JJ change ids are persistent, so try using full change ids instead of relative.
