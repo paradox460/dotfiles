@@ -61,5 +61,9 @@ mise.local.lock
 mise.*.local.lock
 .mise.*.local.lock
 
+# Pitchfork local configs
+pitchfork.local.toml
+.pitchfork.local.toml
+
 # Claude local files
 **/.claude/*.local.json
