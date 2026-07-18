@@ -73,6 +73,7 @@ vim.api.nvim_create_autocmd('InsertLeave', {
 
 -- Show partial commands in the last line of the screen
 vim.opt.showcmd = true
+vim.opt.autocomplete = true
 
 -- ============================================================================
 -- Search Settings
@@ -131,6 +132,13 @@ vim.opt.statusline = '[%n] %f%( %r%)%m %y%=%4l:%02v/%L %3p%%'
 
 -- Use the system clipboard for appropriate operations
 vim.opt.clipboard = 'unnamed'
+
+
+-- ============================================================================
+-- LSP configs
+-- ============================================================================
+
+require('config.lsp')
 
 -- ============================================================================
 -- Machine Local configuration

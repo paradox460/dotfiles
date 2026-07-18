@@ -2,26 +2,31 @@
 -- Treesitter Plugin Configuration (main branch)
 -- ============================================================================
 -- Treesitter provides better syntax highlighting, code understanding, and
--- text objects through incremental parsing
+-- text objects through incremental parsing.
 --
--- Note: This uses the NEW main branch API (not master/legacy)
+-- Uses the rewritten `main` branch API (the legacy `master`/module system is
+-- archived and incompatible with Neovim 0.12). Parser-management commands
+-- (:TSInstall, :TSUpdate, :TSUninstall, :TSInstallFromGrammar, :TSLog) are
+-- provided by the plugin automatically because it is not lazy-loaded.
 -- See: https://github.com/nvim-treesitter/nvim-treesitter
 
 return {
-  -- Main Treesitter plugin
   {
     "nvim-treesitter/nvim-treesitter",
-    
-    -- IMPORTANT: Must not be lazy-loaded (per official docs)
+
+    -- Track the rewritten main branch (master is frozen for Nvim <= 0.11).
+    branch = "main",
+
+    -- Must not be lazy-loaded (per official docs); also ensures the
+    -- :TSInstall/:TSUpdate/... user commands are registered.
     lazy = false,
-    
-    -- Automatically update parsers on plugin update
+
+    -- Rebuild parsers with the new compiler on plugin update.
     build = ":TSUpdate",
-    
-    -- Plugin configuration
+
     config = function()
-      -- List of languages to install parsers for
-      local languages = {
+      -- Parsers to ensure are installed.
+      local ensure_installed = {
         "elixir",
         "fish",
         "javascript",
@@ -39,28 +44,26 @@ return {
         "yaml",
         "toml",
       }
-      
-      -- Install parsers asynchronously (non-blocking)
-      require("nvim-treesitter").install(languages)
-      
-      -- Enable treesitter highlighting for supported filetypes
-      -- This replaces the old configs.setup({ highlight = { enable = true } })
+
+      -- Install only the parsers that are missing (install() runs async).
+      local installed = require("nvim-treesitter.config").get_installed()
+      local to_install = vim.iter(ensure_installed)
+        :filter(function(lang)
+          return not vim.tbl_contains(installed, lang)
+        end)
+        :totable()
+      if #to_install > 0 then
+        require("nvim-treesitter").install(to_install)
+      end
+
+      -- Enable treesitter highlighting (and, where a parser exists,
+      -- experimental treesitter indentation) per buffer.
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "*",
         callback = function()
-          -- Check if treesitter parser is available for this filetype
-          local ok, parser = pcall(vim.treesitter.get_parser)
-          if ok and parser then
-            vim.treesitter.start()
+          if pcall(vim.treesitter.start) then
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
           end
-        end,
-      })
-      
-      -- Optional: Enable treesitter-based indentation (experimental)
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = languages,
-        callback = function()
-          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
       })
     end,
