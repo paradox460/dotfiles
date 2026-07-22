@@ -47,6 +47,7 @@ latest(
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
 "closest_merge(to)" = "heads(::to & merges())"
+'private_commits()' = "description(glob:'private:*') | bookmarks(glob:'private/*') | bookmarks(exact:'megamerge')"
 
 [templates]
 git_push_bookmark = '"jeffs/push/" ++ change_id.short()'
@@ -58,6 +59,10 @@ timestamp,
 timestamp.ago()
 )
 """
+
+[colors]
+tag = { fg = "magenta", italic = true }
+tags = { fg = "magenta", italic = true }
 
 [fsmonitor]
 backend = "watchman"
@@ -75,10 +80,9 @@ diff-args = ["--partial-changeset", "$left", "$right"]
 merge-args = ["--merge", "--output", "$output", "--base", "$base", "$left", "$right"]
 
 [git]
-private-commits = "description(glob:'private:*') | bookmarks(glob:'private/*') | bookmarks(exact:'megamerge')"
+private-commits = "private_commits()"
 colocate = true
 write-change-id-header = true
-
 
 [remotes.origin]
 # Auto-track my prefixed bookmarks in all circumstances
