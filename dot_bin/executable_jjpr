@@ -9,7 +9,6 @@ set -l bookmarks
 set -q _flag_dry_run; and set dry_run "--dry-run"
 
 if set -q _flag_change
-  set -a push_args -N
   for rev in $_flag_change
     set -a push_args -c $rev
   end
