@@ -20,10 +20,8 @@
     #     {{ printf "%q" "{{ .Source }}" }},
     #     {{ printf "%q" "{{ .Target }}" }},
     # ]
-    command = "ksdiff"
+    command = "bash"
     args = [
-    "--merge",
-    "--output", {{ printf "%q" "{{ .Destination }}" }},
-    {{ printf "%q" "{{ .Source }}" }},
-    {{ printf "%q" "{{ .Target }}" }},
+        "-c",
+        {{ printf "%q" "cp {{ .Source | quote }} {{ printf \"%s.base\" .Source | quote }} && ksdiff --merge --output {{ .Source | quote }} --base {{ printf \"%s.base\" .Source | quote }} {{ .Destination | quote }} {{ .Target | quote }}; rm -f {{ printf \"%s.base\" .Source | quote }}" }},
     ]
