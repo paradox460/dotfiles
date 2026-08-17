@@ -127,6 +127,10 @@ function setup(config)
     end
   end, { desc = "open pr in browser", seq = { "x", "g" }, scope = "revisions" })
 
+  config.action("land in megamerge", function()
+    jj("rebase", "--before", "megamerge", "--after", "trunk()", "--revision", context.change_id())
+  end, { desc = "land in megamerge", seq = {"x", "l"}, scope = "revisions"})
+
   -- Rebinds
   config.bind({ key = "s", action = "revisions.open_squash", scope = "revisions", desc = "squash" })
   config.bind({ key = "shift+s", action = "revisions.split", scope = "revisions", desc = "split" })

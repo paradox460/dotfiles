@@ -35,6 +35,8 @@ stage = ["stack", "closest_merge(@)+:: ~ empty()"]
 # `jj restack` to rebase your changes onto `trunk()`
 restack = ["rebase", "--onto", "trunk()", "--source", "roots(trunk()..) & mutable()", "--simplify-parents"]
 
+land = ["rebase", "--after", "trunk()", "--before", "megamerge", "--revisions"]
+
 [revset-aliases]
 'local_trunk()' = '''
 latest(
