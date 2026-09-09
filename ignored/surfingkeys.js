@@ -53,6 +53,9 @@ unmap('_L');
 // Unmap emoji input
 iunmap(':');
 
+// Unmap llm translate
+unmap('<Space>t');
+
 // settings.hintAlign = "left"
 
 //Add shift-toggle for background hints
