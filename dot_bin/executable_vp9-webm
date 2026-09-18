@@ -1,101 +1,207 @@
-#! /usr/bin/env fish
+#!/usr/bin/env -S usage fish
+#USAGE unknown_flags error
+#USAGE flag "-e --edit" help="Open the command in vim before editing; requires vipe"
+#USAGE flag "-c --crf <crf>" help="Specify the desired CRF to be used"
+#USAGE flag "-t --targetfs <fs>" help="Specify the target file size and binary-search for the closest suitable CRF"
+#USAGE flag "--copy" help="Copy the resulting output file to the clipboard; requires file-to-clipboard"
+#USAGE flag "-y --yoink" help="Put the resulting file in Yoink; requires yoink"
+#USAGE flag "--tmp" help="Write output to /tmp instead of beside the input"
+#USAGE arg "<file>" help="Input video file"
 
-argparse -x 'c,t' -i 'e/edit' 'c/crf=' 't/targetfs=' 'h/help' 'copy' 'y/yoink' 'tmp' -- $argv
-
-if set -q _flag_h
-  echo -e "\
-Convert a video to a VP9/opus webm, suitable for uploading to imageboards
-Usage: vp9-webm [options] video-file
-Options:
-  -h, --help          Show this help message and exit
-  -e, --edit          Open the command in vim before editing. Requires the vipe
-                      command to be installed
-  -c, --crf=<crf>     Specify the desired CRF to be used
-  -t, --targetfs=<fs> Specify the target file size. Will conduct a binary search
-                        to find a suitable CRF that comes smaller, but as close to the specified
-                        file size as possible.
-                      Accepts basic file size multipliers (k, m, etc).
-  --copy              Copies the resulting output file to the clipboard.
-                        Requires file-to-clipboard command
-  --tmp               Outputs finished movie to /tmp dir
-  -y, --yoink         Puts the file in Yoink, if the yoink command can be found.
-  "
-  exit 0
+if set -q usage_crf; and set -q usage_targetfs
+  echo "Options --crf and --targetfs are mutually exclusive" >&2
+  exit 1
 end
 
-if not set -q _flag_c
-       and test -z "$_flag_c"
-          set _flag_c 31
+set -l f "$usage_file"
+
+set -l crf 31
+if set -q usage_crf
+  set crf "$usage_crf"
+end
+if not string match -rq '^[0-9]+$' -- "$crf"; or test "$crf" -gt 63
+  echo "CRF must be an integer from 0 to 63: $crf" >&2
+  exit 1
 end
 
+set -l targetfs
+set -l target_size_bytes
 set -l fs_limit ""
-if set -q _flag_t
-  set fs_limit "-fs $_flag_t"
+if set -q usage_targetfs
+  set targetfs "$usage_targetfs"
+  if not string match -rq '^[1-9][0-9]*([kKmMgG])?$' -- "$targetfs"
+    echo "Target size must be a positive number with an optional k, m, or g suffix: $targetfs" >&2
+    exit 1
+  end
+  set fs_limit "-fs "(string escape -- "$targetfs")
+  set -l size_match (string match -r '^([1-9][0-9]*)([kKmMgG])?$' -- "$targetfs")
+  set target_size_bytes "$size_match[2]"
+  switch (string lower -- "$size_match[3]")
+    case k
+      set target_size_bytes (math "$target_size_bytes * 1000")
+    case m
+      set target_size_bytes (math "$target_size_bytes * 1000000")
+    case g
+      set target_size_bytes (math "$target_size_bytes * 1000000000")
+  end
+end
+if not test -r "$f"
+  echo "Input file is not readable: $f" >&2
+  exit 1
 end
 
+for dependency in ffmpeg ffprobe
+  if not command -sq $dependency
+    echo "Required command not found: $dependency" >&2
+    exit 1
+  end
+end
 
-set -l f $argv[1]
-set -l original_duration (ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $f)
+if test "$usage_edit" = true; and not command -sq vipe
+  echo "The --edit option requires vipe" >&2
+  exit 1
+end
+if test "$usage_copy" = true; and not command -sq file-to-clipboard
+  echo "The --copy option requires file-to-clipboard" >&2
+  exit 1
+end
+if test "$usage_yoink" = true; and not command -sq yoink
+  echo "The --yoink option requires yoink" >&2
+  exit 1
+end
 
+ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 -i "$f" >/dev/null
+if test $status -ne 0
+  echo "Could not inspect input file: $f" >&2
+  exit 1
+end
+
+set -l input_name (path basename -- "$f")
+set -l output_stem (string replace -r '\.[^./]*$' '' -- "$input_name")
+if test -z "$output_stem"
+  set output_stem "$input_name"
+end
+set -l output_dir (path dirname -- "$f")
+if test "$usage_tmp" = true
+  set output_dir /tmp
+end
+set -l output_path "$output_dir/$output_stem.webm"
+set -l input_abs (path resolve -- "$f")
+set -l output_abs (path resolve -- "$output_path")
+if test (string lower -- "$input_abs") = (string lower -- "$output_abs")
+  echo "Refusing to overwrite the input file: $f" >&2
+  exit 1
+end
+
+set -l temp_root "$TMPDIR"
+if test -z "$temp_root"
+  set temp_root /tmp
+end
+set -l work_dir (mktemp -d "$temp_root/vp9-webm.XXXXXX")
+if test $status -ne 0
+  echo "Could not create a temporary working directory" >&2
+  exit 1
+end
+set -l cleanup_command "rm -rf "(string escape -- "$work_dir")
+trap "$cleanup_command" EXIT
+
+set -l candidate_path "$work_dir/output.webm"
+set -l pass_log "$work_dir/passlog"
+set -l escaped_f (string escape -- "$f")
+set -l escaped_candidate (string escape -- "$candidate_path")
+set -l escaped_pass_log (string escape -- "$pass_log")
 set -l l_crf 0
 set -l r_crf 63
 
-set -l newname
-set -l dir_prefix
-if set -q _flag_tmp
-  set dir_prefix '/tmp/'
-end
-
 while true
-  set -l ext (string split --right --max 1 '.' -- $f)[-1]
-  set newname "$dir_prefix"(basename $f "."$ext)'.webm'
+  set -l command "ffmpeg -hide_banner -i $escaped_f -c:v libvpx-vp9 -an -b:v 0 -crf $crf $fs_limit -passlogfile $escaped_pass_log -pass 1 -f null /dev/null && ffmpeg -y -hide_banner -i $escaped_f -c:v libvpx-vp9 -c:a libopus -b:v 0 -crf $crf $fs_limit -passlogfile $escaped_pass_log -pass 2 $escaped_candidate"
 
-
-  set -l command "ffmpeg -hide_banner -i \"$f\" -c:v libvpx-vp9 -an -b:v 0 -crf $_flag_c $fs_limit -pass 1 -f null /dev/null && ffmpeg -y -hide_banner -i \"$f\" -c:v libvpx-vp9 -c:a libopus -b:v 0 -crf $_flag_c $fs_limit -pass 2 \"$newname\""
-
-  if set -q _flag_e
-    set command (printf $command | vipe)
+  if test "$usage_edit" = true
+    set command (printf '%s\n' "$command" | vipe)
+    if test $status -ne 0
+      echo "vipe failed while editing the ffmpeg command" >&2
+      exit 1
+    end
+    if test -z "$command"
+      echo "The edited ffmpeg command was empty" >&2
+      exit 1
+    end
   end
 
-  fish -c $command
-  rm ffmpeg2pass-*.log
+  fish -c "$command"
+  set -l encode_status $status
+  if test $encode_status -ne 0
+    echo "ffmpeg failed while encoding $f" >&2
+    exit $encode_status
+  end
+  if not test -f "$candidate_path"
+    echo "ffmpeg completed without creating an output file" >&2
+    exit 1
+  end
 
-  if not set -q _flag_t
+  if not set -q usage_targetfs
+    mv -f "$candidate_path" "$output_path"
+    if test $status -ne 0
+      echo "Could not move the output file to $output_path" >&2
+      exit 1
+    end
     break
   end
 
-  set -l duration (ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $newname)
-
-  if test $duration -ge $original_duration
-    test "pass, no truncate"
-    set r_crf $_flag_c
-    mv $newname "maybe-$newname"
-  else if test $duration -lt $original_duration
-    test "fail, truncate"
-    set l_crf $_flag_c
+  set -l output_size (wc -c < "$candidate_path" | string trim)
+  if not string match -rq '^[0-9]+$' -- "$output_size"
+    echo "Could not determine the output file size" >&2
+    exit 1
   end
 
-  if test (math $r_crf - $l_crf) -le 1
-    echo "Found target size, exiting"
-    if set -q _flag_tmp
-      mv "maybe-$newname" /tmp/$newname
-      set newname /tmp/$newname
-    else
-      mv "maybe-$newname" $newname
+  if test "$output_size" -le "$target_size_bytes"
+    set r_crf "$crf"
+    set -l best_path "$work_dir/best.webm"
+    mv -f "$candidate_path" "$best_path"
+    if test $status -ne 0
+      echo "Could not preserve the best target-size candidate" >&2
+      exit 1
     end
-    exit 0
+    set best_output "$best_path"
+  else
+    set l_crf "$crf"
   end
 
+  if test (math "$r_crf - $l_crf") -le 1
+    if not set -q best_output
+      echo "No CRF produced an output at or below target size $targetfs" >&2
+      exit 1
+    end
+    mv -f "$best_output" "$output_path"
+    if test $status -ne 0
+      echo "Could not move the target-size output to $output_path" >&2
+      exit 1
+    end
+    break
+  end
 
-  set _flag_c (math "max(0,min(63, floor(($l_crf + $r_crf)/2)))")
+  set crf (math "max(0,min(63, floor(($l_crf + $r_crf)/2)))")
 end
 
-
-if set -q _flag_copy; and command -q file-to-clipboard
-  file-to-clipboard "$newname"
+if not test -f "$output_path"
+  echo "Expected output file was not created: $output_path" >&2
+  exit 1
 end
 
-
-if set -q _flag_y
-  yoink (readlink -f $newname)
+if test "$usage_copy" = true
+  file-to-clipboard "$output_path"
+  if test $status -ne 0
+    echo "Could not copy the output file to the clipboard" >&2
+    exit 1
+  end
 end
+
+if test "$usage_yoink" = true
+  yoink (path resolve -- "$output_path")
+  if test $status -ne 0
+    echo "Could not put the output file in Yoink" >&2
+    exit 1
+  end
+end
+
+echo "$output_path"
