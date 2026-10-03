@@ -60,6 +60,7 @@ mise.local.lock
 .mise.local.lock
 mise.*.local.lock
 .mise.*.local.lock
+.mise/locks/mise.local/
 
 # Pitchfork local configs
 pitchfork.local.toml
@@ -70,3 +71,6 @@ hk.local.pkl
 
 # Claude local files
 **/.claude/*.local.json
+
+# Fnox
+fnox.local.toml
