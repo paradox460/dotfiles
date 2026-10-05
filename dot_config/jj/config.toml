@@ -88,7 +88,7 @@ write-change-id-header = true
 
 [remotes.origin]
 # Auto-track my prefixed bookmarks in all circumstances
-auto-track-bookmarks = "glob:jeffs/*"
+auto-track-bookmarks = "jeffs/* | main | master"
 
 # These options allow for `jj diff` and `jj show` to clear the output from the terminal after closing the pager.
 [[--scope]]
