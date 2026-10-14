@@ -74,3 +74,6 @@ hk.local.pkl
 
 # Fnox
 fnox.local.toml
+
+# OMP in-repo configs
+.omp/
