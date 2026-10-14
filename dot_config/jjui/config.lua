@@ -19,6 +19,7 @@
 -- x s         sign checked or current change(s)
 -- x b n       new change on bookmark
 -- x b r       rebase change onto bookmark
+-- x t         reset timestamp to now
 --
 -- Evolog/Oplog:
 -- alt+j        inject entry before @ (splits change at that point)
@@ -94,6 +95,22 @@ function setup(config)
     jj(args)
     revisions.refresh()
   end, { desc = "sign checked or current change(s)", seq = { "x", "s" }, scope = "revisions" })
+
+  config.action("retime", function()
+    local checked = context.checked_change_ids()
+    local args = { "metaedit", "--update-author-timestamp" }
+    if #checked > 0 then
+      for _, change_id in ipairs(checked) do
+        args[#args + 1] = "-r"
+        args[#args + 1] = change_id
+      end
+    else
+      args[#args + 1] = "-r"
+      args[#args + 1] = context.change_id()
+    end
+    jj(args)
+    revisions.refresh()
+  end, { desc = "update timestamp of checked or current change(s)", seq = { "x", "t" }, scope = "revisions" })
 
   config.action("new on bookmark", function()
     local selected = choose_bookmark("New change on bookmark")
