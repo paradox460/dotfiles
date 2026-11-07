@@ -11,6 +11,7 @@
 -- ctrl+c b    copy bookmark name
 -- ctrl+c a    copy preview
 --
+-- x a         abandon all empty mutables
 -- x j         new branch from jira ticket
 -- x p         new pr from bookmark
 -- x P         new pr from change
@@ -43,6 +44,10 @@ function setup(config)
 
   clipboard.register(config)
   inject.register(config)
+
+  config.action("abandon empty mutable changes", function()
+    jj("abandon", "-r", "\"empty() & mutable()\"")
+  end, { desc = "abandon all empty+mutable changes", seq = { "x", "a" }, scope = "revisions" })
 
   config.action("new jira bookmark", function()
     local desc = jj_log_template("description")
@@ -146,7 +151,7 @@ function setup(config)
 
   config.action("land in megamerge", function()
     jj("rebase", "--before", "megamerge", "--after", "trunk()", "--revision", context.change_id())
-  end, { desc = "land in megamerge", seq = {"x", "l"}, scope = "revisions"})
+  end, { desc = "land in megamerge", seq = { "x", "l" }, scope = "revisions" })
 
   -- Rebinds
   config.bind({ key = "s", action = "revisions.open_squash", scope = "revisions", desc = "squash" })
