@@ -129,6 +129,7 @@ enter_accept = true
 
 # Keybind mode
 keymap_mode = "auto"
+search_mode = "daemon-fuzzy"
 
 [stats]
 # Set commands where we should consider the subcommand for statistics. Eg, kubectl get vs just kubectl
@@ -147,5 +148,15 @@ common_subcommands = [
   "jj"
 ]
 
+[ai]
+enabled = true
+
+[daemon]
+enabled = true
+autostart = true
+
 # Set commands that should be totally stripped and ignored from stats
 #common_prefix = ["sudo"]
+
+[threads]
+capture = true

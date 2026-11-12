@@ -2,9 +2,9 @@ symbolPreset: nerd
 theme:
   dark: tomorrow-night
   light: light
-setupVersion: 1
+setupVersion: 3
 statusLine:
-  preset: custom
+  preset: nerd
   leftSegments:
     - model
     - mode
@@ -27,47 +27,61 @@ statusLine:
 display:
   showTokenUsage: true
   cacheMissMarker: true
+  subagentLivePreview: false
 task:
   showResolvedModelBadge: true
-  eager: always
+  eager: default
   isolation:
-    mode: auto
-modelRoles:
-  default: openrouter/xiaomi/mimo-v2.5-pro
+    enabled: true
 defaultThinkingLevel: auto
 secrets:
   enabled: true
 github:
   enabled: true
 showHardwareCursor: false
-tools:
-  {}
-mcp:
-  {}
+tools: {}
+mcp: {}
 hideThinkingBlock: false
 browser:
   headless: true
+  relay: false
 steeringMode: one-at-a-time
 followUpMode: one-at-a-time
 interruptMode: immediate
 compaction:
-  strategy: snapcompact
+  methodOrder:
+    - snapcompact
+    - remote
+    - soft
 plan:
   defaultOnStartup: true
+  autosave: true
 features:
-  unexpectedStopDetection: true
+  unexpectedStopDetection: smart
 terminal:
   showProgress: true
 power:
   sleepPrevention: system
 memory:
   backend: mnemopi
-readLineNumbers: true
 mnemopi:
   scoping: per-project-tagged
-
 readLineNumbers: true
-contextPromotion:
-  enabled: true
+dev:
+  autoqaConsent: denied
+composer:
+  shape: box
+  tokenRate: true
 astGrep:
   enabled: true
+isolation:
+  backend: auto
+tui:
+  vimMode: true
+  vimModeDisplay: text
+  mouse: false
+  titleSpinner: braille
+retry:
+  maxRetries: 3
+update:
+  auto: false
