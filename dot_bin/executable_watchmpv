@@ -1,38 +1,57 @@
-#! /usr/bin/env fish
-argparse -i "prune=+" "findOpts=" "printf=" "sort=" "filetypes=+" -- $argv
+#!/usr/bin/env -S usage fish
+#USAGE flag "--prune <glob>" var=#true help="Skip paths matching this case-insensitive find -ipath glob (matched against absolute paths, so lead with *); repeatable. *.stversions is always pruned"
+#USAGE flag "--global-find-opts <opts>" help="Extra find options placed right after the start directory, e.g. --global-find-opts='-maxdepth 2'"
+#USAGE flag "--find-opts <opts>" help="Extra find tests ANDed after the filetype match, e.g. --find-opts='-mtime -7'"
+#USAGE flag "--time <time>" default="mtime" help="Timestamp to sort by" {
+#USAGE   choices "mtime" "atime" "ctime" "birth"
+#USAGE }
+#USAGE flag "--sort <opts>" default="-n -r" help="gsort options applied to '<timestamp>\t<path>' lines; attach with =, e.g. --sort=-R to shuffle"
+#USAGE flag "--filetypes <ext>" var=#true delimiter="," help="Video extensions to include; comma-separated or repeatable (default: mkv,webm,mp4,m4v,avi)"
+#USAGE arg "[mpv_args]..." help="Arguments passed through to mpv; unrecognized flags also land here"
 
-set -q _flag_printf; or set _flag_printf "%T@\t%p\n"
-if set -q _flag_sort;
-  echo $_flag_sort | read -ta _flag_sort
-else
-  set _flag_sort -n -u -r
+set -l prune -ipath '*.stversions'
+set -l prune_globs
+if set -q usage_prune
+  eval "set prune_globs $usage_prune"
+end
+for glob in $prune_globs
+  set -a prune -o -ipath $glob
 end
 
-if set -q _flag_findOpts
-  echo $_flag_findOpts | read -ta _flag_findOpts
+set -l exts mkv webm mp4 m4v avi
+if set -q usage_filetypes
+  eval "set exts $usage_filetypes"
 end
-
-set -l prune -ipath \*.stversions
-if set -q _flag_prune
-  for p in $_flag_prune
-    set -a prune -o -ipath $p
-  end
-end
-
 set -l filetypes
-if set -q _flag_filetypes
-  set _flag_filetypes (string split "," $_flag_filetypes)
-else
-  set _flag_filetypes mkv webm mp4 m4v avi
+for ext in $exts
+  set -a filetypes -o -iname "*.$ext"
 end
-
-for i in $_flag_filetypes
-  set -a filetypes -o -iname \*.$i
-end
-
-# Erase the -o at the start
+# Drop the leading -o
 set -e filetypes[1]
 
-set -q _flag_depth; set -a _flag_depth -depth
+set -l global_find_opts (string split -n ' ' -- "$usage_global_find_opts")
+set -l find_opts (string split -n ' ' -- "$usage_find_opts")
+set -l sort_opts (string split -n ' ' -- "$usage_sort")
 
-gfind $pwd \( $prune \) -prune -o \( $filetypes \) $_flag_findOpts -type f -printf "$_flag_printf" | gsort $_flag_sort | gawk -F '\t' -v ORS='\0' '{print $2}' | xargs -0 realpath | mpv --playlist=- --fs --loop $argv
+set -l time_format
+switch $usage_time
+  case mtime
+    set time_format '%T@'
+  case atime
+    set time_format '%A@'
+  case ctime
+    set time_format '%C@'
+  case birth
+    set time_format '%B@'
+end
+
+set -l root (pwd -P)
+set -l files (gfind $root $global_find_opts \( $prune \) -prune -o \( $filetypes \) $find_opts -type f -printf "$time_format\t%p\n" | gsort $sort_opts | gcut -f2-)
+if test (count $files) -eq 0
+  echo "No matching video files found under $root" >&2
+  exit 1
+end
+
+set -l mpv_args
+eval "set mpv_args $usage_mpv_args"
+printf '%s\n' $files | mpv --playlist=- --fs --loop $mpv_args

@@ -1,2 +1,2 @@
 #! /usr/bin/env fish
-watchmpv --sort="-R" $argv
+exec watchmpv --sort=-R $argv
