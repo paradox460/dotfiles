@@ -16,7 +16,7 @@ prompt = "Email Address"
 default = ""
 prompt = "GPG Signature"
 
-# GitHub MCP token for the claude/zed `token` merges below. fnox exports it (~/.config/fnox/config.toml) via the
+# GitHub MCP token for the claude/zed `token` merges below. fnox exports it from scripts/fnox.toml, only inside the
 # `dot`/`setup` tasks. It's read only when the key is missing from the live file; status/diff never read it.
 [bootstrap.secrets.github_mcp_pat]
 env = "GITHUB_MCP_PAT"
@@ -95,20 +95,20 @@ dot_prefix = true
 # Wrappers that run mise under `fnox exec` so the token merges can read GITHUB_MCP_PAT (needed only when
 # the token key is missing: new machine or rotation). Arguments are appended:
 # `mise run dot apply`, `mise run dot diff ~/.gitconfig`, `mise run setup --only repos,dotfiles`.
-# fnox is a task tool and reads its config straight from the repo, so both work before synced.toml and
-# ~/.config/fnox are linked on a new machine. A missing keychain item only warns; the token is then
-# written empty (allow_empty above).
+# fnox is a task tool and reads its config straight from the repo: scripts/fnox.toml, kept out of home/ so it isn't
+# fnox's global config and the `fnox activate` shell hook doesn't export the token into every shell. A missing
+# keychain item only warns; the token is then written empty (allow_empty above).
 [tasks.dot]
 description = "Run `mise dot …` with fnox secrets injected"
 tools.fnox = "1.47"
 interactive = true
-run = 'fnox -c "$HOME/.dotfiles/home/dot-config/fnox/config.toml" exec -- mise dot'
+run = 'fnox -c "$HOME/.dotfiles/scripts/fnox.toml" exec -- mise dot'
 
 [tasks.setup]
 description = "Run `mise bootstrap --prompt-vars …` with fnox secrets injected"
 tools.fnox = "1.47"
 interactive = true
-run = 'fnox -c "$HOME/.dotfiles/home/dot-config/fnox/config.toml" exec -- mise bootstrap --prompt-vars'
+run = 'fnox -c "$HOME/.dotfiles/scripts/fnox.toml" exec -- mise bootstrap --prompt-vars'
 
 # was run_onchange_after_install_usage_completions; the script is idempotent and cheap, so it runs every apply
 [tasks."dotfiles:usage-completions"]

@@ -13,10 +13,10 @@ mise run setup --only repos,dotfiles
 
 `setup` is `mise bootstrap --prompt-vars` run under `fnox exec`; it installs fnox for itself, asks for your git name, email, and signing key once, then clones the mpv script repos and deploys everything. Drop `--only` to run the full bootstrap (packages, macOS defaults, tools).
 
-The GitHub MCP token in the Claude and Zed settings comes from the macOS keychain through fnox (`home/dot-config/fnox/config.toml`, keychain service `github`, account `mcp`). mise writes it only when the key is missing from the live file, so on a machine without the keychain item it's written empty. To fill it in (or rotate it), store the token, delete the key from both settings files (`env.GITHUB_MCP_PAT` in `~/.claude/settings.json`, `context_servers.mcp-server-github.settings.github_personal_access_token` in `~/.config/zed/settings.json`), then apply:
+The GitHub MCP token in the Claude and Zed settings comes from the macOS keychain through fnox (`scripts/fnox.toml`, keychain service `github`, account `mcp`). That config lives outside `home/` on purpose: deployed as `~/.config/fnox/config.toml` it would be fnox's global config, and the `fnox activate` hook would export the token into every shell. Only the `dot` and `setup` tasks load it, with `fnox -c`. mise writes the token only when the key is missing from the live file, so on a machine without the keychain item it's written empty. To fill it in (or rotate it), store the token, delete the key from both settings files (`env.GITHUB_MCP_PAT` in `~/.claude/settings.json`, `context_servers.mcp-server-github.settings.github_personal_access_token` in `~/.config/zed/settings.json`), then apply:
 
 ```sh
-fnox set GITHUB_MCP_PAT --provider github-keychain --key-name mcp   # paste the token at the hidden prompt
+fnox -c ~/.dotfiles/scripts/fnox.toml set GITHUB_MCP_PAT --provider github-keychain --key-name mcp   # paste the token at the hidden prompt
 mise run dot apply
 ```
 
