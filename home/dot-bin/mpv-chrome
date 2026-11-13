@@ -1,0 +1,19 @@
+#! /usr/bin/env fish
+argparse -i 'a/all' 'e/edit' -- $argv
+set -l urls
+if test -n "$_flag_a"
+  echo "Playing ALL tabs from front window"
+  set urls (osascript -l JavaScript -e "Application('Google Chrome').windows[0].tabs().map(t => t.url()).join('\n')")
+else
+  set urls (osascript -l JavaScript -e "Application('Google Chrome').windows[0].activeTab.url()")
+end
+
+if test -n "$_flag_e"
+  set urls (string join \n $urls | vipe)
+end
+
+if test -n "$urls"
+  mpv --playlist=(string join \n $urls| psub) $argv
+echo
+  echo "Nothing to do"
+end

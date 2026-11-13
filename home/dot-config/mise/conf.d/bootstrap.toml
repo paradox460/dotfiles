@@ -1,0 +1,28 @@
+[bootstrap.macos.dock]
+autohide = true
+largesize = 110
+tilesize = 70
+show_recents = false
+apps = [
+  "/System/Volumes/Data/Applications/Setapp/Path Finder.app",
+  "/System/Volumes/Data/Applications/Telegram.app",
+  "/System/Volumes/Data/Applications/Zed.app",
+  "/System/Volumes/Data/Applications/iTerm.app",
+  "/System/Volumes/Data/Applications/Vivaldi.app",
+]
+
+[bootstrap.macos.finder]
+show_pathbar = true
+show_status_bar = true
+preferred_view_style = "column"
+sort_folders_first = true
+save_new_documents_to_cloud = false
+
+[bootstrap.macos.keyboard]
+press_and_hold = false
+
+[bootstrap.macos.trackpad]
+tap_to_click = true
+
+[bootstrap.hooks]
+post-defaults = "killall Dock || true"

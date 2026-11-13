@@ -1,0 +1,10 @@
+
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[user]
+name = {{ vars.git_name | json_encode }}
+email = {{ vars.git_email | json_encode }}
+
+[signing]
+key = "{{ vars.gpg_signing_key }}!"
+{% if vars.git_name == "" or vars.git_email == "" or vars.gpg_signing_key == "" %}{{ throw(message="git identity vars unset; run `mise vars prompt`") }}{% endif -%}

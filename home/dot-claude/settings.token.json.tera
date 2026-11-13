@@ -1,0 +1,5 @@
+{
+  "env": {
+    "GITHUB_MCP_PAT": "{{ secret(name='github_mcp_pat') }}"
+  }
+}

@@ -1,0 +1,5 @@
+default-cache-ttl 600
+max-cache-ttl 7200
+{% if os() == "macos" -%}
+pinentry-program /opt/homebrew/bin/pinentry-mac
+{% endif -%}

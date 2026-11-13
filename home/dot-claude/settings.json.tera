@@ -1,0 +1,131 @@
+{
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "command": "osascript -e 'display notification \"Claude Code needs your attention\" with title \"Claude Code\" sound name \"Ping\"'",
+            "type": "command"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "{{ env.HOME }}/.config/iterm2/cc-status",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "command": "{{ env.HOME }}/.config/iterm2/cc-status",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "async": true,
+            "command": "jj util snapshot --quiet",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash|Edit|Write|NotebookEdit"
+      },
+      {
+        "hooks": [
+          {
+            "command": "{{ env.HOME }}/.config/iterm2/cc-status",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "{{ env.HOME }}/.config/iterm2/cc-status",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "command": "{{ env.HOME }}/.config/iterm2/cc-status",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "{{ env.HOME }}/.config/iterm2/cc-status",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "{{ env.HOME }}/.config/iterm2/cc-status",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "command": "{{ env.HOME }}/.config/iterm2/cc-status",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "{{ env.HOME }}/.config/iterm2/cc-status",
+            "type": "command"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(jj log:*)",
+      "Bash(jj status*)",
+      "Bash(jj show*)",
+      "Bash(jj diff:*)",
+      "Bash(jj describe*)",
+      "Bash(jj commit*)",
+      "Bash(jj bookmark create*)",
+      "Bash(jj git fetch*)",
+      "Bash(jj rebase*)",
+      "Bash(jj squash*)",
+      "Bash(jj new*)"
+    ],
+    "defaultMode": "default",
+    "disableAutoMode": "disable",
+    "disableBypassPermissionsMode": "disable"
+  }
+}

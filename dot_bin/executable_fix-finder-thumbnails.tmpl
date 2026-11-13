@@ -1,8 +1,0 @@
-{{- if eq .chezmoi.os "darwin" -}}
-#!/usr/bin/env fish
-killall "Path Finder"
-rm -rf ~/Library/Caches/com.cocoatech.PathFinder
-rm ~/Library/Preferences/com.apple.finder.plist
-killall Finder
-
-{{ end -}}

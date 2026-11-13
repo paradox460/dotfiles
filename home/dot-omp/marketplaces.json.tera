@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "marketplaces": [
+    {
+      "name": "claude-plugins-official",
+      "sourceType": "github",
+      "sourceUri": "anthropics/claude-plugins-official",
+      "catalogPath": "{{ env.HOME }}/.omp/plugins/cache/marketplaces/claude-plugins-official/marketplace.json",
+      "addedAt": "2026-06-03T09:44:28.621Z",
+      "updatedAt": "2026-11-13T03:52:24.582Z"
+    },
+    {
+      "name": "humanizer",
+      "sourceType": "github",
+      "sourceUri": "blader/humanizer",
+      "catalogPath": "{{ env.HOME }}/.omp/plugins/cache/marketplaces/humanizer/marketplace.json",
+      "addedAt": "2026-09-22T00:01:42.728Z",
+      "updatedAt": "2026-11-13T03:52:25.010Z"
+    }
+  ]
+}

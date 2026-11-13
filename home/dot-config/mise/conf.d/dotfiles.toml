@@ -1,0 +1,145 @@
+# Dotfiles deployed by `mise dot apply` / `mise bootstrap`. Source tree: ~/.dotfiles/home
+
+# The git repo is the history; mise's own dotfile history and auto-capture aren't used
+[settings]
+history.enabled = false
+
+[vars.git_name]
+default = ""
+prompt = "Your Name"
+
+[vars.git_email]
+default = ""
+prompt = "Email Address"
+
+[vars.gpg_signing_key]
+default = ""
+prompt = "GPG Signature"
+
+# GitHub MCP token for the claude/zed `token` merges below. fnox exports it (~/.config/fnox/config.toml) via the
+# `dot`/`setup` tasks. It's read only when the key is missing from the live file; status/diff never read it.
+[bootstrap.secrets.github_mcp_pat]
+env = "GITHUB_MCP_PAT"
+description = "GitHub MCP personal access token (fnox keychain: service github, account mcp)"
+allow_empty = true
+
+[dotfile_groups.home]
+root = "home"
+target = "~"
+mode = "symlink-each"
+dot_prefix = true
+
+[dotfile_groups.home.entries]
+"~/.gitconfig" = { source = "dot-gitconfig.tera", mode = "template" }
+"~/.config/jj/conf.d/local.toml" = { source = "dot-config/jj/conf.d/local.toml.tera", mode = "template" }
+# Claude and Zed rewrite their settings, so mise owns only some keys:
+#   shared   (merge = true)       enforced on every apply
+#   defaults (merge = "missing")  seeded when absent, then the app owns them
+#   token    (merge = "missing")  the secret; to rotate, delete the key from the live file and apply
+"~/.claude/settings.json/shared" = { source = "dot-claude/settings.json.tera", merge = true, template = "tera" }
+"~/.claude/settings.json/defaults" = { source = "dot-claude/settings.defaults.json", merge = "missing" }
+"~/.claude/settings.json/token" = { source = "dot-claude/settings.token.json.tera", merge = "missing", template = "tera" }
+"~/.config/zed/settings.json/shared" = { source = "dot-config/zed/settings.json", merge = true, format = "jsonc", permissions = "0600" }
+"~/.config/zed/settings.json/defaults" = { source = "dot-config/zed/settings.defaults.json", merge = "missing", format = "jsonc", permissions = "0600" }
+"~/.config/zed/settings.json/token" = { source = "dot-config/zed/settings.token.json.tera", merge = "missing", template = "tera", format = "jsonc", permissions = "0600" }
+"~/.omp/marketplaces.json/defaults" = { source = "dot-omp/marketplaces.json.tera", merge = "missing", template = "tera" }
+# macOS-only files: linked on macOS, skipped elsewhere (a variant that matches nothing skips the entry, and the walk doesn't link it either)
+"~/.config/fish/functions/mpv.fish" = { source = "dot-config/fish/functions/mpv.fish", variants = [{ os = "macos" }] }
+"~/.bin/file-to-clipboard" = { source = "dot-bin/file-to-clipboard", variants = [{ os = "macos" }] }
+"~/.bin/fix-finder-thumbnails" = { source = "dot-bin/fix-finder-thumbnails", variants = [{ os = "macos" }] }
+"~/.bin/mpv-chrome" = { source = "dot-bin/mpv-chrome", variants = [{ os = "macos" }] }
+"~/.bin/pf-selection" = { source = "dot-bin/pf-selection", variants = [{ os = "macos" }] }
+"~/.bin/ytdl-chrome" = { source = "dot-bin/ytdl-chrome", variants = [{ os = "macos" }] }
+# macOS-only apps; directories are linked file by file like the rest of the group. karabiner is a file entry
+# because [dotfiles] below also declares ~/.config/karabiner (permissions), and the same target can't be both.
+"~/.hammerspoon" = { source = "dot-hammerspoon", variants = [{ os = "macos" }] }
+"~/.config/karabiner/karabiner.json" = { source = "dot-config/karabiner/karabiner.json", variants = [{ os = "macos" }] }
+"~/.config/yabai" = { source = "dot-config/yabai", variants = [{ os = "macos" }] }
+"~/.config/skhd" = { source = "dot-config/skhd", variants = [{ os = "macos" }] }
+"~/.config/gh/hosts.yml" = { source = "dot-config/gh/hosts.yml", mode = "copy", permissions = "0600", create_if_missing = true }
+# gpg wants private config files, so these are 0600 copies; copy live edits back with `mise dot add <path>`
+"~/.gnupg/gpg.conf" = { source = "dot-gnupg/gpg.conf", mode = "copy", permissions = "0600" }
+# rendered, so the pinentry-mac line exists only on macOS
+"~/.gnupg/gpg-agent.conf" = { source = "dot-gnupg/gpg-agent.conf.tera", mode = "template", permissions = "0600" }
+"~/.gnupg/dirmngr.conf" = { source = "dot-gnupg/dirmngr.conf", mode = "copy", permissions = "0600" }
+# 1Password SSH agent for every host; host entries stay local in ~/.ssh/config (the repo is public).
+# Edits take no `variants`, so the template renders an empty block off macOS: only the two marker lines are written.
+"~/.ssh/config/1password" = { source = "dot-ssh/config.1password.tera", template = "tera" }
+
+[dotfiles]
+# `depends` waits for the home group to create them on a fresh machine
+"~/.config/karabiner" = { permissions = "0700", depends = ["home"], variants = [{ os = "macos" }] }
+"~/.omp/agent" = { permissions = "0700", depends = ["home"] }
+"~/.gnupg" = { permissions = "0700", depends = ["home"] }
+# mpv scripts linked out of the cloned script repos (was symlink_*.tmpl)
+"~/.config/mpv/scripts/atime.js" = { source = "~/.config/mpv/script_sources/paradox-scripts/atime/atime.js", mode = "symlink" }
+"~/.config/mpv/scripts/collect.js" = { source = "~/.config/mpv/script_sources/paradox-scripts/collect/collect.js", mode = "symlink" }
+"~/.config/mpv/scripts/createchapter.lua" = { source = "~/.config/mpv/script_sources/mpv-createchapter/createchapter.lua", mode = "symlink" }
+"~/.config/mpv/scripts/crop.lua" = { source = "~/.config/mpv/script_sources/mpv-scripts/scripts/crop.lua", mode = "symlink" }
+"~/.config/mpv/scripts/encode.lua" = { source = "~/.config/mpv/script_sources/mpv-scripts/scripts/encode.lua", mode = "symlink" }
+"~/.config/mpv/scripts/misc.lua" = { source = "~/.config/mpv/script_sources/mpv-scripts/scripts/misc.lua", mode = "symlink" }
+"~/.config/mpv/scripts/mpv_chapters.js" = { source = "~/.config/mpv/script_sources/mpv-chapters/mpv_chapters.js", mode = "symlink" }
+"~/.config/mpv/scripts/seek-to.lua" = { source = "~/.config/mpv/script_sources/mpv-scripts/scripts/seek-to.lua", mode = "symlink" }
+"~/.config/mpv/scripts/skipsegment.js" = { source = "~/.config/mpv/script_sources/paradox-scripts/skipsegment/skipsegment.js", mode = "symlink" }
+"~/.config/mpv/scripts/writeedits.js" = { source = "~/.config/mpv/script_sources/paradox-scripts/writeedits/writeedits.js", mode = "symlink" }
+"~/.config/mpv/scripts/writename.lua" = { source = "~/.config/mpv/script_sources/paradox-scripts/writename/writename.lua", mode = "symlink" }
+
+# cloned by `mise bootstrap` before dotfiles
+[bootstrap.repos]
+"~/.config/mpv/script_sources/mpv-chapters" = { url = "https://github.com/zxhzxhz/mpv-chapters.git", depth = 1 }
+"~/.config/mpv/script_sources/mpv-createchapter" = { url = "https://github.com/shinchiro/mpv-createchapter.git", depth = 1 }
+"~/.config/mpv/script_sources/mpv-scripts" = { url = "https://github.com/occivink/mpv-scripts.git", depth = 1 }
+"~/.config/mpv/script_sources/mpv-sponsorblock" = { url = "https://github.com/po5/mpv_sponsorblock.git", depth = 1 }
+"~/.config/mpv/script_sources/paradox-scripts" = { url = "https://github.com/paradox460/mpv-scripts.git", depth = 1 }
+
+# Wrappers that run mise under `fnox exec` so the token merges can read GITHUB_MCP_PAT (needed only when
+# the token key is missing: new machine or rotation). Arguments are appended:
+# `mise run dot apply`, `mise run dot diff ~/.gitconfig`, `mise run setup --only repos,dotfiles`.
+# fnox is a task tool and reads its config straight from the repo, so both work before synced.toml and
+# ~/.config/fnox are linked on a new machine. A missing keychain item only warns; the token is then
+# written empty (allow_empty above).
+[tasks.dot]
+description = "Run `mise dot …` with fnox secrets injected"
+tools.fnox = "1.47"
+interactive = true
+run = 'fnox -c "$HOME/.dotfiles/home/dot-config/fnox/config.toml" exec -- mise dot'
+
+[tasks.setup]
+description = "Run `mise bootstrap --prompt-vars …` with fnox secrets injected"
+tools.fnox = "1.47"
+interactive = true
+run = 'fnox -c "$HOME/.dotfiles/home/dot-config/fnox/config.toml" exec -- mise bootstrap --prompt-vars'
+
+# was run_onchange_after_install_usage_completions; the script is idempotent and cheap, so it runs every apply
+[tasks."dotfiles:usage-completions"]
+description = "Regenerate fish completions for usage scripts in ~/.bin"
+run = "fish ~/.dotfiles/scripts/usage-completions.fish"
+
+# was run_once_install_bun_completions
+[tasks."dotfiles:bun-completions"]
+description = "Install bun's fish completions into fish's vendor completions dir"
+# bun picks the completion format from $SHELL (hooks may not inherit it) and prints instead of installing when stdout isn't a TTY.
+# Written to vendor_completions.d (as usage-completions does) so ~/.config/fish/completions stays for hand-written ones.
+run = 'if command -v bun >/dev/null 2>&1; then mkdir -p "$HOME/.local/share/fish/vendor_completions.d" && SHELL=fish bun completions > "$HOME/.local/share/fish/vendor_completions.d/bun.fish"; fi'
+
+# was run_onchange_install_fisher_plugins; skipped while fish_plugins is unchanged
+[tasks."dotfiles:fisher"]
+description = "Sync fisher plugins with fish_plugins"
+dir = "{{ env.HOME }}/.config/fish"
+# sources resolve from the config root, not `dir`
+sources = ["{{ env.HOME }}/.config/fish/fish_plugins"]
+run = "fish -c 'fisher update'"
+
+# Regenerates the Default profile's rules in ~/.config/karabiner/karabiner.json (a link into home/) from scripts/karabiner.ts.
+# Karabiner is macOS-only, like the ~/.config/karabiner entry above.
+[tasks."dotfiles:karabiner"]
+description = "Regenerate Karabiner rules from scripts/karabiner.ts (macOS only)"
+run = '[ "$(uname -s)" = Darwin ] || { echo "dotfiles:karabiner: Karabiner-Elements is macOS-only" >&2; exit 1; }; "$HOME/.dotfiles/scripts/karabiner.ts"'
+
+[bootstrap.hooks.post-dotfiles]
+description = "Regenerate fish completions and sync fisher plugins"
+run = [
+  'cd "$HOME" && {{ mise_bin }} run dotfiles:usage-completions',
+  'cd "$HOME" && {{ mise_bin }} run dotfiles:bun-completions',
+  'cd "$HOME" && {{ mise_bin }} run dotfiles:fisher',
+]

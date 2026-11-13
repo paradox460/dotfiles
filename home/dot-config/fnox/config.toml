@@ -1,0 +1,7 @@
+[providers.github-keychain]
+type = "keychain"
+service = "github"
+
+[secrets]
+# default: export an empty token when the keychain item is missing (new machine), so templates still render
+GITHUB_MCP_PAT = { provider = "github-keychain", value = "mcp", default = "" }

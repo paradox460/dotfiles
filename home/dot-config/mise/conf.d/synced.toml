@@ -1,0 +1,22 @@
+# These configs are things that I want on every machine I use
+# Local configs should go in the ~/.config/mise/config.toml file
+[tools]
+"cargo:lucky_commit" = "latest"
+"cargo:sd" = "latest"
+"cargo:spurdify" = "latest"
+cargo-binstall = "latest"
+cosign = "latest"
+fnox = "1.47" # 1.48.0's release binary links NSGlassEffectView (macOS 26+) and aborts at launch on macOS 15
+rust = "stable"
+slsa-verifier = "latest"
+usage = "latest"
+watchexec = "latest"
+"cargo:diffedit3" = "latest"
+"github:fresh2dev/zellij-autolock" = { version = "latest", asset_pattern = "zellij-autolock.wasm", postinstall = 'mkdir -p "$HOME/.config/zellij/plugins" && ln -sf "$MISE_TOOL_INSTALL_PATH"/*.wasm "$HOME/.config/zellij/plugins/"' }
+
+[settings]
+jobs = 8
+experimental = true
+lockfile = true
+# Docker makes a _far_ better portable postgres setup
+disable_tools = ["postgres"]

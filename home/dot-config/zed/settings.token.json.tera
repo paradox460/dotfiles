@@ -1,0 +1,9 @@
+{
+  "context_servers": {
+    "mcp-server-github": {
+      "settings": {
+        "github_personal_access_token": "{{ secret(name='github_mcp_pat') }}"
+      }
+    }
+  }
+}
