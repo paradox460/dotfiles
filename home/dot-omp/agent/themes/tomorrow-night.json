@@ -78,6 +78,7 @@
 
     "bashMode": "base0C",
     "pythonMode": "base0E",
+    "btwMode": "base09",
 
     "statusLineBg": "base00",
     "statusLineSep": "base03",
